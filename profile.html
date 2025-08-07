@@ -465,7 +465,11 @@
       }
 
       function openFacebookPost() {
-        window.open("https://www.facebook.com/", "_blank");
+        const content = document.getElementById("aiGeneratedContent").innerText;
+        const fbUrl = `https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(
+          content
+        )}`;
+        window.open(fbUrl, "_blank");
       }
     </script>
   </body>
