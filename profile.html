@@ -146,22 +146,37 @@
       <h2>📢 โพสต์ที่สร้างจาก AI</h2>
       <p id="aiGeneratedContent" style="white-space: pre-wrap"></p>
       <p style="font-size: 12px; color: gray; margin-top: 10px">
-        💡 คุณสามารถใส่ภาพกิจกรรมหรือสถานที่ที่เกี่ยวข้องกับโพสต์นี้เพิ่มเติมได้ในภายหลัง
+        💡
+        คุณสามารถใส่ภาพกิจกรรมหรือสถานที่ที่เกี่ยวข้องกับโพสต์นี้เพิ่มเติมได้ในภายหลัง
       </p>
-      <button
-        onclick="shareToFacebook()"
-        style="
-          margin-top: 10px;
-          background: #4267b2;
-          color: white;
-          padding: 10px 20px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-        "
-      >
-        📤 แชร์ไป Facebook
-      </button>
+      <div style="margin-top: 10px">
+        <button
+          onclick="copyPostText()"
+          style="
+            background: gray;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+          "
+        >
+          📋 คัดลอกข้อความ
+        </button>
+        <button
+          onclick="openFacebookPost()"
+          style="
+            background: #4267b2;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+          "
+        >
+          📤 โพสต์บน Facebook
+        </button>
+      </div>
     </div>
 
     <div id="chatBox">
@@ -402,9 +417,6 @@
             reply(
               "พลอยใสช่วยสร้างโพสต์ให้เรียบร้อยแล้วค่ะ ลองตรวจสอบดูว่าชอบไหมนะคะ 😊"
             );
-            speakThai(
-              "พลอยใสช่วยสร้างโพสต์ให้เรียบร้อยแล้วค่ะ ลองตรวจสอบดูว่าชอบไหมนะคะ"
-            );
           } else {
             reply("ขออภัย ไม่สามารถสร้างโพสต์ได้ในขณะนี้");
           }
@@ -442,12 +454,18 @@
         }
       });
 
-      function shareToFacebook() {
+      function copyPostText() {
         const content = document.getElementById("aiGeneratedContent").innerText;
-        const fbUrl = `https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(
-          content
-        )}`;
-        window.open(fbUrl, "_blank");
+        navigator.clipboard
+          .writeText(content)
+          .then(() =>
+            alert("📋 คัดลอกข้อความเรียบร้อยแล้ว กรุณานำไปวางในโพสต์ Facebook")
+          )
+          .catch((err) => alert("เกิดข้อผิดพลาดในการคัดลอก"));
+      }
+
+      function openFacebookPost() {
+        window.open("https://www.facebook.com/", "_blank");
       }
     </script>
   </body>
