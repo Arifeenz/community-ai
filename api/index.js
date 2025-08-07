@@ -17,7 +17,7 @@ if (!process.env.OPENAI_API_KEY) {
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-app.post("/generate", async (req, res) => {
+app.post("/api/generate", async (req, res) => {
   try {
     const prompt = req.body.prompt;
 
