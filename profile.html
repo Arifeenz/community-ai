@@ -15,12 +15,15 @@
       h1 {
         color: darkgreen;
       }
+
       .profile {
         flex: 1;
       }
+
       .sidebar {
         width: 300px;
       }
+
       .activity-box {
         border: 1px solid #ccc;
         border-radius: 8px;
@@ -28,10 +31,12 @@
         margin-bottom: 10px;
         background: #f9f9f9;
       }
+
       .chat-button {
         position: fixed;
         bottom: 20px;
-        right: 20px;
+        left: 50%;
+        transform: translateX(-50%);
         background: darkgreen;
         color: white;
         padding: 15px 25px;
@@ -39,7 +44,9 @@
         font-size: 16px;
         cursor: pointer;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
       }
+
       #chatBox {
         position: fixed;
         bottom: 80px;
@@ -52,7 +59,9 @@
         display: none;
         flex-direction: column;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        z-index: 999;
       }
+
       #chatMessages {
         flex: 1;
         overflow-y: auto;
@@ -60,6 +69,7 @@
         display: flex;
         flex-direction: column;
       }
+
       .bubble {
         max-width: 80%;
         padding: 8px 12px;
@@ -67,19 +77,23 @@
         margin: 4px 0;
         word-wrap: break-word;
       }
+
       .ai {
         align-self: flex-start;
         background: #fce4ec;
         color: #ad1457;
       }
+
       .user {
         align-self: flex-end;
         background: #c8e6c9;
         color: #1b5e20;
       }
+
       #chatInput {
         display: flex;
       }
+
       #chatInput input {
         flex: 1;
         padding: 8px;
@@ -87,6 +101,7 @@
         border-top: 1px solid #ccc;
         border-bottom-left-radius: 10px;
       }
+
       #chatInput button {
         padding: 8px 12px;
         border: none;
@@ -95,6 +110,7 @@
         color: white;
         cursor: pointer;
       }
+
       #voiceBtn {
         background: orange;
         border-bottom-right-radius: 10px;
@@ -129,6 +145,9 @@
     >
       <h2>📢 โพสต์ที่สร้างจาก AI</h2>
       <p id="aiGeneratedContent" style="white-space: pre-wrap"></p>
+      <p style="font-size: 12px; color: gray; margin-top: 10px">
+        💡 คุณสามารถใส่ภาพกิจกรรมหรือสถานที่ที่เกี่ยวข้องกับโพสต์นี้เพิ่มเติมได้ในภายหลัง
+      </p>
       <button
         onclick="shareToFacebook()"
         style="
@@ -143,10 +162,6 @@
       >
         📤 แชร์ไป Facebook
       </button>
-      <p style="font-size: 12px; color: gray; margin-top: 10px">
-        💡
-        คุณสามารถใส่ภาพกิจกรรมหรือสถานที่ที่เกี่ยวข้องกับโพสต์นี้เพิ่มเติมได้ในภายหลัง
-      </p>
     </div>
 
     <div id="chatBox">
@@ -162,7 +177,7 @@
       </div>
     </div>
 
-    <div class="chat-button" onclick="openChat()">💬 คุยกับพลอยใส</div>
+    <div class="chat-button" onclick="toggleChat()">💬 คุยกับพลอยใส</div>
 
     <script>
       const communityName =
@@ -243,18 +258,23 @@
         chatMessages.scrollTop = chatMessages.scrollHeight;
       }
 
-      function openChat() {
-        chatBox.style.display = "flex";
-        if (chatMessages.childElementCount === 0) {
-          const greeting = `สวัสดีค่ะชุมชน ${communityName} พลอยใสยินดีให้บริการค่ะ 🌸`;
-          addBubble(greeting, "ai");
-          speakThai(greeting);
-          setTimeout(() => {
-            const ask =
-              "วันนี้อยากสร้างคอนเทนต์แบบไหนคะ (กิจกรรม, สถานที่ท่องเที่ยว, ร้านอาหาร, โรงแรม)?";
-            addBubble(ask, "ai");
-            speakThai(ask);
-          }, 3000);
+      function toggleChat() {
+        const visible = chatBox.style.display === "flex";
+        if (visible) {
+          chatBox.style.display = "none";
+        } else {
+          chatBox.style.display = "flex";
+          if (chatMessages.childElementCount === 0) {
+            const greeting = `สวัสดีค่ะชุมชน ${communityName} พลอยใสยินดีให้บริการค่ะ 🌸`;
+            addBubble(greeting, "ai");
+            speakThai(greeting);
+            setTimeout(() => {
+              const ask =
+                "วันนี้อยากสร้างคอนเทนต์แบบไหนคะ (กิจกรรม, สถานที่ท่องเที่ยว, ร้านอาหาร, โรงแรม)?";
+              addBubble(ask, "ai");
+              speakThai(ask);
+            }, 3000);
+          }
         }
       }
 
@@ -424,10 +444,9 @@
 
       function shareToFacebook() {
         const content = document.getElementById("aiGeneratedContent").innerText;
-        const url = location.origin;
-        const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-          url
-        )}&quote=${encodeURIComponent(content)}`;
+        const fbUrl = `https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(
+          content
+        )}`;
         window.open(fbUrl, "_blank");
       }
     </script>
