@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>เข้าสู่ระบบชุมชน</title>
+  <style>
+    body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 50px; }
+    input, button { font-size: 18px; padding: 10px; margin: 10px; }
+  </style>
+</head>
+<body>
+  <h2>กรอกชื่อชุมชนของคุณ</h2>
+  <input type="text" id="communityName" placeholder="เช่น บ้านทุ่งยางแดง" />
+  <button onclick="enterCommunity()">เข้าสู่ระบบ</button>
+
+  <script>
+    function enterCommunity() {
+      const name = document.getElementById('communityName').value.trim();
+      if (!name) return alert('กรุณากรอกชื่อชุมชน');
+      localStorage.setItem('communityName', name);
+      window.location.href = "profile.html";
+    }
+  </script>
+</body>
+</html>

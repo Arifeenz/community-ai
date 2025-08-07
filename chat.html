@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AI แชทชุมชน</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+      }
+      #chat {
+        border: 1px solid #ccc;
+        padding: 10px;
+        height: 300px;
+        overflow-y: auto;
+      }
+      .msg {
+        margin: 5px 0;
+      }
+      .ai {
+        color: darkblue;
+      }
+      .user {
+        color: darkgreen;
+      }
+      button {
+        margin-top: 10px;
+        padding: 10px;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>💬 แชทกับ AI</h2>
+    <div id="chat"></div>
+    <button onclick="startListening()">🎙 พูดตอบ AI</button>
+
+    <script>
+      // โหลดชื่อชุมชน
+      const communityName =
+        localStorage.getItem("communityName") || "ชุมชนของคุณ";
+      const chatBox = document.getElementById("chat");
+
+      // ฟังก์ชันเพิ่มข้อความลงแชท
+      function addMessage(text, sender) {
+        const div = document.createElement("div");
+        div.className = "msg " + sender;
+        div.textContent = text;
+        chatBox.appendChild(div);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+
+      // พูดเสียงไทยผ่าน Google Translate TTS
+      // function speakThai(text) {
+      //   const audio = new Audio(
+      //     "https://translate.google.com/translate_tts?ie=UTF-8&tl=th&client=tw-ob&q=" + encodeURIComponent(text)
+      //   );
+      //   audio.play();
+      // }
+      function speakThai(text) {
+        if ("speechSynthesis" in window) {
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = "th-TH";
+
+          const voices = speechSynthesis
+            .getVoices()
+            .filter((v) => v.lang.startsWith("th"));
+          if (voices.length > 0) {
+            utterance.voice = voices[0];
+          }
+
+          speechSynthesis.speak(utterance);
+        } else {
+          const audio = new Audio(
+            "https://translate.google.com/translate_tts?ie=UTF-8&tl=th&client=tw-ob&q=" +
+              encodeURIComponent(text)
+          );
+          audio.oncanplaythrough = () => audio.play();
+        }
+      }
+
+      // ฟังก์ชันฟังเสียง
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.lang = "th-TH";
+      recognition.interimResults = false;
+
+      recognition.onresult = function (event) {
+        const text = event.results[0][0].transcript;
+        addMessage(text, "user");
+        // ที่นี่สามารถส่ง text ไปเก็บใน server หรือฐานข้อมูลได้
+      };
+
+      recognition.onerror = function (event) {
+        alert("เกิดข้อผิดพลาด: " + event.error);
+      };
+
+      function startListening() {
+        recognition.start();
+      }
+
+      // ทักทายเมื่อเข้าหน้า
+      const greeting = `สวัสดีชุมชน ${communityName} วันนี้เป็นอย่างไรบ้างครับ`;
+      addMessage(greeting, "ai");
+      speakThai(greeting);
+    </script>
+  </body>
+</html>
