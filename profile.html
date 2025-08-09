@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>โปรไฟล์ชุมชน</title>
   <style>
+    /* ---------- Theme Tokens ---------- */
     :root{
       --bg: #f6f7fb;
       --card: #ffffff;
@@ -50,6 +51,7 @@
       transition: background .25s ease, color .2s ease;
     }
 
+    /* ---------- Layout ---------- */
     .container{
       max-width: 1200px; margin: 0 auto;
       display: grid; gap: 24px;
@@ -65,6 +67,7 @@
       padding: 20px;
     }
 
+    /* ---------- Header ---------- */
     .page-header{
       display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom: 16px;
     }
@@ -77,6 +80,7 @@
     h1{margin:0; font-size: clamp(20px, 2.5vw, 28px);}
     .meta{color:var(--muted); font-size: 14px; margin-top:4px}
 
+    /* ---------- Sidebar ---------- */
     .sidebar h2{margin: 0 0 10px}
     .activity-box{
       border:1px solid var(--border);
@@ -86,6 +90,7 @@
     }
     .preview .activity-box{ outline: 2px dashed color-mix(in srgb, var(--ring) 40%, transparent); }
 
+    /* ---------- AI content ---------- */
     #aiContentBox{ display:none }
     .ai-card{
       background: color-mix(in srgb, var(--card) 85%, var(--ai) );
@@ -105,16 +110,27 @@
     .btn.fb{ background:#4267b2; }
     .btn:active{ transform: translateY(1px) }
 
-    /* -------- Chat floating trigger button -------- */
+    /* ---------- Chat trigger button ---------- */
     .chat-button{
       position: fixed;
       left: 50%; transform: translateX(-50%);
       bottom: calc(16px + env(safe-area-inset-bottom, 0px));
       background: var(--primary); color:#fff; padding: 14px 20px; border-radius: 999px;
       font-size: 16px; cursor: pointer; box-shadow: var(--shadow); z-index: 1000; border: none;
+      transition: opacity .15s ease;
+    }
+    /* มือถือ: ย้ายปุ่มไปล่างขวา และซ่อนเมื่อเปิดแชท */
+    @media (max-width: 768px){
+      .chat-button{
+        right: 16px; left: auto; transform: none;
+        bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+      }
+      body.chat-open .chat-button{
+        opacity: 0; pointer-events: none;
+      }
     }
 
-    /* -------- Chat box (fixed) -------- */
+    /* ---------- Chat box ---------- */
     #chatBox{
       position: fixed;
       right: 16px;
@@ -122,47 +138,36 @@
       width: min(380px, 94vw);
       height: 520px;
       display:none; flex-direction: column;
-      background: var(--card);
-      border:1px solid var(--border);
-      border-radius: 14px;
-      box-shadow: var(--shadow);
-      z-index: 999;
-      overflow: hidden;            /* กันปุ่มล้นออกนอกกรอบ */
+      background: var(--card); border:1px solid var(--border);
+      border-radius: 14px; box-shadow: var(--shadow);
+      z-index: 999; overflow: hidden;
     }
-
     #chatMessages{
       flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:6px;
+      scroll-behavior: smooth;
     }
     .bubble{
-      max-width: 85%; padding: 8px 12px; border-radius: 12px; margin: 2px 0; word-wrap: break-word; line-height:1.35;
-      border: 1px solid var(--border);
+      max-width: 85%; padding: 8px 12px; border-radius: 12px; margin: 2px 0;
+      word-wrap: break-word; line-height:1.35; border: 1px solid var(--border);
     }
     .ai{ align-self:flex-start; background: var(--ai); color: var(--ai-text); }
     .user{ align-self:flex-end; background: var(--user); color: var(--user-text); }
 
-    /* -------- Chat input bar (pinned inside box) -------- */
+    /* Chat input bar */
     #chatInput{
-      display:flex;
-      align-items:center;
-      gap: 8px;
-      padding: 8px;
-      border-top:1px solid var(--border);
-      background: var(--card);
-      width: 100%;
+      display:flex; align-items:center; gap: 8px; padding: 8px;
+      border-top:1px solid var(--border); background: var(--card); width: 100%;
     }
     #chatInput input{
       font-size:16px; /* กัน iOS ซูม */
-      flex:1; min-width: 0;
-      padding:12px 14px; border:none; background:transparent; color:var(--text); outline:none;
+      flex:1; min-width: 0; padding:12px 14px; border:none; background:transparent; color:var(--text); outline:none;
     }
     #chatInput .send-btn{
-      flex: 0 0 auto;
-      min-width: 88px; border:none; background: var(--primary); color:#fff;
+      flex: 0 0 auto; min-width: 88px; border:none; background: var(--primary); color:#fff;
       padding: 10px 14px; border-radius: 10px; font-weight: 600; cursor:pointer;
     }
     #chatInput .voice-btn{
-      flex: 0 0 auto;
-      min-width: 56px; border:none; background:#f59e0b; color:#fff;
+      flex: 0 0 auto; min-width: 56px; border:none; background:#f59e0b; color:#fff;
       padding: 10px 12px; border-radius: 10px; font-weight: 700; cursor:pointer;
     }
     @media (max-width: 480px){
@@ -170,6 +175,7 @@
       #chatInput .voice-btn{ padding: 12px 14px; font-size: 18px; }
     }
 
+    /* ---------- Theme Toggle ---------- */
     .theme-toggle{
       display:inline-flex; align-items:center; gap:8px;
       background: transparent; color: var(--text);
@@ -178,6 +184,7 @@
     .theme-toggle:hover{ background: color-mix(in srgb, var(--bg) 60%, transparent); }
     .theme-toggle svg{ width:18px; height:18px; display:block }
 
+    /* ---------- Utilities ---------- */
     .row{ display:flex; flex-wrap:wrap; gap:10px; align-items:center }
     .muted{ color: var(--muted) }
     pre, textarea { white-space: pre-wrap; }
@@ -185,6 +192,7 @@
 </head>
 <body>
   <div class="container">
+    <!-- Main -->
     <section class="card">
       <header class="page-header">
         <div class="title">
@@ -217,6 +225,7 @@
       </div>
     </section>
 
+    <!-- Sidebar -->
     <aside class="sidebar">
       <div class="card">
         <h2>โพสต์ล่าสุด</h2>
@@ -241,20 +250,23 @@
   <button class="chat-button" onclick="toggleChat()">💬 คุยกับพลอยใส</button>
 
   <script>
+    /* ---------- Init Community Title ---------- */
     const communityName = localStorage.getItem("communityName") || "ชุมชนของคุณ";
     document.getElementById("communityTitle").textContent = "🏡 " + communityName;
 
+    /* ---------- Elements ---------- */
     const chatBox = document.getElementById("chatBox");
     const chatMessages = document.getElementById("chatMessages");
     const userInput = document.getElementById("userMsg");
     const activityPreview = document.getElementById("activityPreview");
     const activityList = document.getElementById("activityList");
 
-    /* -------- Theme toggle -------- */
+    /* ---------- Theme Toggle ---------- */
     const root = document.documentElement;
     const tBtn = document.getElementById("themeToggle");
     const tIcon = document.getElementById("themeIcon");
     const tText = document.getElementById("themeText");
+
     function themeIcon(mode){
       const sun = '<svg viewBox="0 0 24 24" fill="none"><path d="M12 4V2m0 20v-2M4 12H2m20 0h-2M5 5 3.6 3.6M20.4 20.4 19 19m0-14 1.4-1.4M5 19 3.6 20.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/></svg>';
       const moon = '<svg viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -262,12 +274,38 @@
       tText.textContent = mode === 'dark' ? 'โหมดมืด' : 'โหมดสว่าง';
       tBtn.setAttribute('aria-pressed', mode === 'dark');
     }
-    function applyTheme(mode){ root.classList.toggle('theme-dark', mode === 'dark'); themeIcon(mode); try{ localStorage.setItem('theme', mode); }catch(e){} }
-    function detectTheme(){ const s = localStorage.getItem('theme'); if(s) return s; return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light'; }
+    function applyTheme(mode){
+      root.classList.toggle('theme-dark', mode === 'dark');
+      themeIcon(mode);
+      try{ localStorage.setItem('theme', mode); }catch(e){}
+    }
+    function detectTheme(){
+      const saved = localStorage.getItem('theme');
+      if(saved) return saved;
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light';
+    }
     (function(){ applyTheme(detectTheme()); })();
     tBtn.addEventListener('click', () => applyTheme(root.classList.contains('theme-dark') ? 'light' : 'dark'));
 
-    /* -------- Chat & Flow -------- */
+    /* ---------- Chat helpers ---------- */
+    function scrollChatToBottom(){
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
+      });
+    }
+    function showChat(){
+      chatBox.style.display = 'flex';
+      document.body.classList.add('chat-open');
+      setTimeout(() => { userInput?.focus(); scrollChatToBottom(); }, 50);
+    }
+    function minimizeChat(){
+      chatBox.style.display = 'none';
+      document.body.classList.remove('chat-open');
+    }
+
+    /* ---------- Chat & Flow ---------- */
     let step = 0;
     let selectedType = "activity";
     let currentData = {};
@@ -335,23 +373,23 @@
       div.className = "bubble " + sender;
       div.textContent = text;
       chatMessages.appendChild(div);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
+      scrollChatToBottom();   // เลื่อนอัตโนมัติเมื่อมีข้อความใหม่
     }
-
-    function isMobile(){ return window.matchMedia('(max-width: 960px)').matches; }
-
-    function minimizeChat(){ chatBox.style.display = "none"; }
+    function reply(text){ addBubble(text, "ai"); speakThai(text); }
 
     function toggleChat() {
       const visible = chatBox.style.display === "flex";
-      chatBox.style.display = visible ? "none" : "flex";
-      if (!visible && chatMessages.childElementCount === 0) {
-        const greeting = `สวัสดีค่ะชุมชน ${communityName} พลอยใสยินดีให้บริการค่ะ 🌸`;
-        addBubble(greeting, "ai"); speakThai(greeting);
-        setTimeout(() => {
-          const ask = "วันนี้อยากสร้างคอนเทนต์แบบไหนคะ (กิจกรรม, สถานที่ท่องเที่ยว, ร้านอาหาร, โรงแรม)?";
-          addBubble(ask, "ai"); speakThai(ask);
-        }, 1200);
+      if (visible) {
+        minimizeChat();
+      } else {
+        showChat();
+        if (chatMessages.childElementCount === 0) {
+          const greeting = `สวัสดีค่ะชุมชน ${communityName} พลอยใสยินดีให้บริการค่ะ 🌸`;
+          reply(greeting);
+          setTimeout(() => {
+            reply("วันนี้อยากสร้างคอนเทนต์แบบไหนคะ (กิจกรรม, สถานที่ท่องเที่ยว, ร้านอาหาร, โรงแรม)?");
+          }, 1200);
+        }
       }
     }
 
@@ -384,8 +422,7 @@
       }
     }
 
-    function askNext(){ const q = templates[selectedType][step - 1]; addBubble(q, "ai"); speakThai(q); }
-    function reply(text){ addBubble(text, "ai"); speakThai(text); }
+    function askNext(){ const q = templates[selectedType][step - 1]; reply(q); }
 
     function showPreview(){
       const labels = templates[selectedType];
@@ -396,18 +433,17 @@
       html += `<div class="row"><button class="btn" onclick="confirmActivity()">✅ ยืนยัน</button></div></div>`;
       activityPreview.innerHTML = html;
 
-      // แจ้งและย่อแชทอัตโนมัติบนมือถือ
+      // แจ้งผู้ใช้ + ย่อแชทอัตโนมัติ "ทุกหน้าจอ"
       reply("นี่คือสรุปข้อมูลใหม่ของคุณค่ะ ตรวจสอบด้านซ้าย แล้วกดแก้ไขหรือยืนยันได้เลย");
-      if (isMobile()) {
-        setTimeout(minimizeChat, 400); // เว้นนิดให้ข้อความขึ้นก่อน
-      }
+      setTimeout(minimizeChat, 400);
     }
 
     function editField(index){
       editingIndex = index;
       const q = templates[selectedType][index];
+      showChat(); // เด้งแชทขึ้นทันที
       reply("ตกลงค่ะ เราจะแก้ไขข้อนี้ใหม่นะคะ");
-      setTimeout(() => reply(q), 600);
+      setTimeout(() => { reply(q); scrollChatToBottom(); }, 300);
     }
 
     function confirmActivity(){
@@ -438,7 +474,7 @@
           document.getElementById("aiGeneratedContent").textContent = content;
           document.getElementById("aiContentBox").style.display = "block";
           reply("พลอยใสช่วยสร้างโพสต์ให้เรียบร้อยแล้วค่ะ ลองตรวจสอบดูนะคะ 😊");
-          if (isMobile()) setTimeout(minimizeChat, 200);
+          setTimeout(minimizeChat, 200);
         }else{
           reply("ขออภัย ไม่สามารถสร้างโพสต์ได้ในขณะนี้");
         }
