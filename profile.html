@@ -1,476 +1,444 @@
 <!DOCTYPE html>
 <html lang="th">
-  <head>
-    <meta charset="UTF-8" />
-    <title>โปรไฟล์ชุมชน</title>
-    <style>
-      body {
-        font-family: sans-serif;
-        padding: 20px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 30px;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>โปรไฟล์ชุมชน</title>
+  <style>
+    /* ---------- Theme Tokens ---------- */
+    :root{
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --primary: #16a34a;
+      --primary-600:#15803d;
+      --accent: #06b6d4;
+      --ai: #fce4ec;
+      --ai-text:#ad1457;
+      --user:#c8e6c9;
+      --user-text:#1b5e20;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+      --ring: #22c55e;
+    }
+    :root.theme-dark{
+      --bg: #0b1220;
+      --card: #0f172a;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border:#243041;
+      --primary:#22c55e;
+      --primary-600:#16a34a;
+      --accent:#22d3ee;
+      --ai:#2b1d24;
+      --ai-text:#f8b4c8;
+      --user:#19321b;
+      --user-text:#b7f7bf;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --ring:#22c55e;
+    }
 
-      h1 {
-        color: darkgreen;
-      }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Thai", "Noto Sans", Arial, sans-serif;
+      color:var(--text); background:
+        radial-gradient(1000px 600px at 10% 0%, rgba(34,197,94,.08), transparent),
+        radial-gradient(1000px 600px at 90% 100%, rgba(6,182,212,.08), transparent),
+        var(--bg);
+      padding: 20px;
+      transition: background .25s ease, color .2s ease;
+    }
 
-      .profile {
-        flex: 1;
-      }
+    /* ---------- Layout ---------- */
+    .container{
+      max-width: 1200px; margin: 0 auto;
+      display: grid; gap: 24px;
+      grid-template-columns: 1fr 320px; /* main + sidebar */
+    }
+    @media (max-width: 960px){
+      .container{ grid-template-columns: 1fr; }
+    }
 
-      .sidebar {
-        width: 300px;
-      }
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
 
-      .activity-box {
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        padding: 10px;
-        margin-bottom: 10px;
-        background: #f9f9f9;
-      }
+    /* ---------- Header ---------- */
+    .page-header{
+      display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom: 16px;
+    }
+    .title{
+      display:flex; align-items:center; gap:12px;
+    }
+    .logo{
+      width:42px; height:42px; border-radius:12px; display:grid; place-items:center;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color:#fff; font-weight:700;
+    }
+    h1{margin:0; font-size: clamp(20px, 2.5vw, 28px);}
+    .meta{color:var(--muted); font-size: 14px; margin-top:4px}
 
-      .chat-button {
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: darkgreen;
-        color: white;
-        padding: 15px 25px;
-        border-radius: 50px;
-        font-size: 16px;
-        cursor: pointer;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        z-index: 1000;
-      }
+    /* ---------- Sidebar ---------- */
+    .sidebar h2{margin: 0 0 10px}
+    .activity-box{
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--card) 90%, var(--bg));
+      border-radius: 12px;
+      padding: 12px; margin-bottom:12px;
+    }
+    .preview .activity-box{ outline: 2px dashed color-mix(in srgb, var(--ring) 40%, transparent); }
 
-      #chatBox {
-        position: fixed;
-        bottom: 80px;
-        right: 20px;
-        width: 320px;
-        height: 450px;
-        background: #fff;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        display: none;
-        flex-direction: column;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        z-index: 999;
-      }
+    /* ---------- AI content ---------- */
+    #aiContentBox{ display:none }
+    .ai-card{
+      background: color-mix(in srgb, var(--card) 85%, var(--ai) );
+      border:1px solid var(--border);
+      border-radius: 12px; padding:16px;
+    }
+    .ai-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    .btn{
+      appearance:none; border:none; cursor:pointer;
+      padding:10px 14px; border-radius:10px; font-weight:600;
+      background: var(--primary); color:#fff;
+      transition: transform .03s, background .15s, opacity .15s, box-shadow .15s;
+      box-shadow: 0 4px 14px rgba(34,197,94,.25);
+    }
+    .btn:hover{ background: var(--primary-600) }
+    .btn.secondary{ background: #6b7280; box-shadow: none; }
+    .btn.fb{ background:#4267b2; }
+    .btn:active{ transform: translateY(1px) }
 
-      #chatMessages {
-        flex: 1;
-        overflow-y: auto;
-        padding: 10px;
-        display: flex;
-        flex-direction: column;
-      }
+    /* ---------- Chat ---------- */
+    .chat-button{
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      background: var(--primary); color:#fff; padding: 14px 20px; border-radius: 999px;
+      font-size: 16px; cursor: pointer; box-shadow: var(--shadow); z-index: 1000; border: none;
+    }
+    #chatBox{
+      position: fixed; bottom: 90px; right: 20px;
+      width: min(360px, 92vw); height: 500px; display:none; flex-direction: column;
+      background: var(--card); border:1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow); z-index: 999;
+    }
+    #chatMessages{
+      flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:6px;
+    }
+    .bubble{
+      max-width: 85%; padding: 8px 12px; border-radius: 12px; margin: 2px 0; word-wrap: break-word; line-height:1.35;
+      border: 1px solid var(--border);
+    }
+    .ai{ align-self:flex-start; background: var(--ai); color: var(--ai-text); }
+    .user{ align-self:flex-end; background: var(--user); color: var(--user-text); }
+    #chatInput{ display:flex; border-top:1px solid var(--border); }
+    #chatInput input{
+      flex:1; padding:12px; border:none; background:transparent; color:var(--text);
+      outline:none;
+    }
+    #chatInput button{
+      border:none; background: var(--primary); color:#fff; padding: 0 14px; cursor:pointer;
+    }
+    #voiceBtn{ background: #f59e0b; border-bottom-right-radius: 14px; }
 
-      .bubble {
-        max-width: 80%;
-        padding: 8px 12px;
-        border-radius: 12px;
-        margin: 4px 0;
-        word-wrap: break-word;
-      }
+    /* ---------- Theme Toggle ---------- */
+    .theme-toggle{
+      display:inline-flex; align-items:center; gap:8px;
+      background: transparent; color: var(--text);
+      border:1px solid var(--border); padding:8px 12px; border-radius: 999px; cursor: pointer;
+    }
+    .theme-toggle:hover{ background: color-mix(in srgb, var(--bg) 60%, transparent); }
+    .theme-toggle svg{ width:18px; height:18px; display:block }
 
-      .ai {
-        align-self: flex-start;
-        background: #fce4ec;
-        color: #ad1457;
-      }
-
-      .user {
-        align-self: flex-end;
-        background: #c8e6c9;
-        color: #1b5e20;
-      }
-
-      #chatInput {
-        display: flex;
-      }
-
-      #chatInput input {
-        flex: 1;
-        padding: 8px;
-        border: none;
-        border-top: 1px solid #ccc;
-        border-bottom-left-radius: 10px;
-      }
-
-      #chatInput button {
-        padding: 8px 12px;
-        border: none;
-        border-top: 1px solid #ccc;
-        background: darkgreen;
-        color: white;
-        cursor: pointer;
-      }
-
-      #voiceBtn {
-        background: orange;
-        border-bottom-right-radius: 10px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="sidebar">
-      <h2>โพสต์ล่าสุด</h2>
-      <div id="activityList"></div>
-      <h2>โพสต์ใหม่ (Preview)</h2>
-      <div id="activityPreview"></div>
-    </div>
-
-    <div class="profile">
-      <h1 id="communityTitle"></h1>
-      <p>👥 จำนวนสมาชิก: 125 คน</p>
-      <p>📅 กิจกรรมล่าสุด: ประชุมหมู่บ้าน 28 ก.ค. 2025</p>
-      <p>📢 ข่าวประกาศ: เชิญร่วมกิจกรรมปลูกป่า 10 ส.ค. 2025</p>
-    </div>
-
-    <div
-      id="aiContentBox"
-      style="
-        display: none;
-        flex: 1;
-        padding: 20px;
-        background: #fff8dc;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-      "
-    >
-      <h2>📢 โพสต์ที่สร้างจาก AI</h2>
-      <p id="aiGeneratedContent" style="white-space: pre-wrap"></p>
-      <p style="font-size: 12px; color: gray; margin-top: 10px">
-        💡
-        คุณสามารถใส่ภาพกิจกรรมหรือสถานที่ที่เกี่ยวข้องกับโพสต์นี้เพิ่มเติมได้ในภายหลัง
-      </p>
-      <div style="margin-top: 10px">
-        <button
-          onclick="copyPostText()"
-          style="
-            background: gray;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-          "
-        >
-          📋 คัดลอกข้อความ
+    /* ---------- Utilities ---------- */
+    .row{ display:flex; flex-wrap:wrap; gap:10px; align-items:center }
+    .muted{ color: var(--muted) }
+    pre, textarea { white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Main -->
+    <section class="card">
+      <header class="page-header">
+        <div class="title">
+          <div class="logo" aria-hidden="true">ช</div>
+          <div>
+            <h1 id="communityTitle">โปรไฟล์ชุมชน</h1>
+            <div class="meta">ข้อมูลภาพรวมและเครื่องมือช่วยสร้างคอนเทนต์</div>
+          </div>
+        </div>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false">
+          <span id="themeIcon" aria-hidden="true"></span>
+          <span id="themeText">โหมดสว่าง</span>
         </button>
-        <button
-          onclick="openFacebookPost()"
-          style="
-            background: #4267b2;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-          "
-        >
-          📤 โพสต์บน Facebook
-        </button>
+      </header>
+
+      <div class="row muted" style="gap:18px; margin-bottom:10px">
+        <div>👥 จำนวนสมาชิก: 125 คน</div>
+        <div>📅 กิจกรรมล่าสุด: ประชุมหมู่บ้าน 28 ก.ค. 2025</div>
+        <div>📢 ข่าวประกาศ: เชิญร่วมกิจกรรมปลูกป่า 10 ส.ค. 2025</div>
       </div>
-    </div>
 
-    <div id="chatBox">
-      <div id="chatMessages"></div>
-      <div id="chatInput">
-        <input
-          type="text"
-          id="userMsg"
-          placeholder="พิมพ์ข้อความหรือกด 🎤..."
-        />
-        <button onclick="sendMsg()">ส่ง</button>
-        <button id="voiceBtn" onclick="startVoice()">🎤</button>
+      <div id="aiContentBox" class="ai-card">
+        <h2 style="margin:0 0 8px">📢 โพสต์ที่สร้างจาก AI</h2>
+        <p id="aiGeneratedContent"></p>
+        <div class="muted" style="font-size:12px">💡 เพิ่มภาพกิจกรรม/สถานที่ประกอบโพสต์ได้ภายหลัง</div>
+        <div class="ai-actions">
+          <button class="btn secondary" onclick="copyPostText()">📋 คัดลอกข้อความ</button>
+          <button class="btn fb" onclick="openFacebookPost()">📤 โพสต์บน Facebook</button>
+        </div>
       </div>
+    </section>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="card">
+        <h2>โพสต์ล่าสุด</h2>
+        <div id="activityList"></div>
+      </div>
+      <div class="card preview" style="margin-top:16px">
+        <h2>โพสต์ใหม่ (Preview)</h2>
+        <div id="activityPreview"></div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Chat -->
+  <div id="chatBox">
+    <div id="chatMessages"></div>
+    <div id="chatInput">
+      <input type="text" id="userMsg" placeholder="พิมพ์ข้อความหรือกด 🎤..." />
+      <button onclick="sendMsg()">ส่ง</button>
+      <button id="voiceBtn" onclick="startVoice()">🎤</button>
     </div>
+  </div>
+  <button class="chat-button" onclick="toggleChat()">💬 คุยกับพลอยใส</button>
 
-    <div class="chat-button" onclick="toggleChat()">💬 คุยกับพลอยใส</div>
+  <script>
+    /* ---------- Init Community Title ---------- */
+    const communityName = localStorage.getItem("communityName") || "ชุมชนของคุณ";
+    document.getElementById("communityTitle").textContent = "🏡 " + communityName;
 
-    <script>
-      const communityName =
-        localStorage.getItem("communityName") || "ชุมชนของคุณ";
-      document.getElementById("communityTitle").textContent =
-        "🏡 " + communityName;
+    /* ---------- Elements ---------- */
+    const chatBox = document.getElementById("chatBox");
+    const chatMessages = document.getElementById("chatMessages");
+    const userInput = document.getElementById("userMsg");
+    const activityPreview = document.getElementById("activityPreview");
+    const activityList = document.getElementById("activityList");
 
-      const chatBox = document.getElementById("chatBox");
-      const chatMessages = document.getElementById("chatMessages");
-      const userInput = document.getElementById("userMsg");
-      const activityPreview = document.getElementById("activityPreview");
-      const activityList = document.getElementById("activityList");
+    /* ---------- Theme Toggle ---------- */
+    const root = document.documentElement;
+    const tBtn = document.getElementById("themeToggle");
+    const tIcon = document.getElementById("themeIcon");
+    const tText = document.getElementById("themeText");
 
-      let step = 0;
-      let selectedType = "activity";
-      let currentData = {};
-      let editingIndex = null;
+    function themeIcon(mode){
+      const sun = '<svg viewBox="0 0 24 24" fill="none"><path d="M12 4V2m0 20v-2M4 12H2m20 0h-2M5 5 3.6 3.6M20.4 20.4 19 19m0-14 1.4-1.4M5 19 3.6 20.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/></svg>';
+      const moon = '<svg viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      tIcon.innerHTML = mode === 'dark' ? moon : sun;
+      tText.textContent = mode === 'dark' ? 'โหมดมืด' : 'โหมดสว่าง';
+      tBtn.setAttribute('aria-pressed', mode === 'dark');
+    }
+    function applyTheme(mode){
+      root.classList.toggle('theme-dark', mode === 'dark');
+      themeIcon(mode);
+      try{ localStorage.setItem('theme', mode); }catch(e){}
+    }
+    function detectTheme(){
+      const saved = localStorage.getItem('theme');
+      if(saved) return saved;
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light';
+    }
+    (function initTheme(){ applyTheme(detectTheme()); })();
+    tBtn.addEventListener('click', () => applyTheme(root.classList.contains('theme-dark') ? 'light' : 'dark'));
 
-      const templates = {
-        activity: [
-          "ชื่อกิจกรรมคืออะไรคะ?",
-          "รายละเอียดกิจกรรมเป็นอย่างไรบ้างคะ?",
-          "กิจกรรมจัดวันไหนคะ?",
-          "จัดที่ไหน? (ระบุสถานที่จัด)",
-          "ต้องลงทะเบียนไหม? มีค่าใช้จ่ายหรือเปล่าคะ?",
-        ],
-        place: [
-          "สถานที่ท่องเที่ยวชื่อว่าอะไรคะ?",
-          "อยู่ที่ตำบล/อำเภอไหนคะ?",
-          "มีอะไรน่าสนใจบ้าง?",
-          "เดินทางไปยังไงได้บ้าง?",
-          "เปิด-ปิดวันไหน? เวลาใด?",
-          "มีค่าเข้าชมหรือไม่คะ?",
-        ],
-        restaurant: [
-          "ชื่อร้านอาหารคืออะไรคะ?",
-          "ร้านนี้อยู่ที่ไหน?",
-          "จุดเด่นของร้านคืออะไรบ้าง?",
-          "เปิด-ปิดวันไหน? เวลาใด?",
-          "มีช่องทางติดต่อหรือโซเชียลมีเดียไหมคะ?",
-        ],
-        hotel: [
-          "โรงแรม/ที่พักชื่อว่าอะไรคะ?",
-          "ตั้งอยู่ที่ไหนคะ?",
-          "จุดเด่นหรือบรรยากาศเป็นแบบไหนคะ?",
-          "มีห้องพักแบบใดบ้าง? ราคาเริ่มต้นที่เท่าไหร่?",
-          "ติดต่อจองที่พักได้ช่องทางใดบ้างคะ?",
-        ],
-      };
+    /* ---------- Chat & Flow ---------- */
+    let step = 0;
+    let selectedType = "activity";
+    let currentData = {};
+    let editingIndex = null;
 
-      function speakThai(text) {
-        const cleaned = text.replace(
-          /[\p{Emoji_Presentation}\p{Emoji}\u200d]+/gu,
-          ""
-        );
-        if ("speechSynthesis" in window) {
-          const utterance = new SpeechSynthesisUtterance(cleaned);
-          utterance.lang = "th-TH";
-          const voices = speechSynthesis
-            .getVoices()
-            .filter((v) => v.lang.startsWith("th"));
-          if (voices.length > 0) utterance.voice = voices[0];
-          speechSynthesis.speak(utterance);
-        } else {
-          const audio = new Audio(
-            "https://translate.google.com/translate_tts?ie=UTF-8&tl=th&client=tw-ob&q=" +
-              encodeURIComponent(cleaned)
-          );
-          audio.oncanplaythrough = () => audio.play();
-        }
+    const templates = {
+      activity: [
+        "ชื่อกิจกรรมคืออะไรคะ?",
+        "รายละเอียดกิจกรรมเป็นอย่างไรบ้างคะ?",
+        "กิจกรรมจัดวันไหนคะ?",
+        "จัดที่ไหน? (ระบุสถานที่จัด)",
+        "ต้องลงทะเบียนไหม? มีค่าใช้จ่ายหรือเปล่าคะ?",
+      ],
+      place: [
+        "สถานที่ท่องเที่ยวชื่อว่าอะไรคะ?",
+        "อยู่ที่ตำบล/อำเภอไหนคะ?",
+        "มีอะไรน่าสนใจบ้าง?",
+        "เดินทางไปยังไงได้บ้าง?",
+        "เปิด-ปิดวันไหน? เวลาใด?",
+        "มีค่าเข้าชมหรือไม่คะ?",
+      ],
+      restaurant: [
+        "ชื่อร้านอาหารคืออะไรคะ?",
+        "ร้านนี้อยู่ที่ไหน?",
+        "จุดเด่นของร้านคืออะไรบ้าง?",
+        "เปิด-ปิดวันไหน? เวลาใด?",
+        "มีช่องทางติดต่อหรือโซเชียลมีเดียไหมคะ?",
+      ],
+      hotel: [
+        "โรงแรม/ที่พักชื่อว่าอะไรคะ?",
+        "ตั้งอยู่ที่ไหนคะ?",
+        "จุดเด่นหรือบรรยากาศเป็นแบบไหนคะ?",
+        "มีห้องพักแบบใดบ้าง? ราคาเริ่มต้นที่เท่าไหร่?",
+        "ติดต่อจองที่พักได้ช่องทางใดบ้างคะ?",
+      ],
+    };
+
+    function speakThai(text) {
+      const cleaned = text.replace(/[\p{Emoji_Presentation}\p{Emoji}\u200d]+/gu, "");
+      if ("speechSynthesis" in window) {
+        const u = new SpeechSynthesisUtterance(cleaned);
+        u.lang = "th-TH";
+        const voices = speechSynthesis.getVoices().filter(v => v.lang.startsWith("th"));
+        if (voices.length > 0) u.voice = voices[0];
+        speechSynthesis.speak(u);
       }
+    }
 
-      function addBubble(text, sender) {
-        const div = document.createElement("div");
-        div.className = "bubble " + sender;
-        div.textContent = text;
-        chatMessages.appendChild(div);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }
+    function addBubble(text, sender) {
+      const div = document.createElement("div");
+      div.className = "bubble " + sender;
+      div.textContent = text;
+      chatMessages.appendChild(div);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
 
-      function toggleChat() {
-        const visible = chatBox.style.display === "flex";
-        if (visible) {
-          chatBox.style.display = "none";
-        } else {
-          chatBox.style.display = "flex";
-          if (chatMessages.childElementCount === 0) {
-            const greeting = `สวัสดีค่ะชุมชน ${communityName} พลอยใสยินดีให้บริการค่ะ 🌸`;
-            addBubble(greeting, "ai");
-            speakThai(greeting);
-            setTimeout(() => {
-              const ask =
-                "วันนี้อยากสร้างคอนเทนต์แบบไหนคะ (กิจกรรม, สถานที่ท่องเที่ยว, ร้านอาหาร, โรงแรม)?";
-              addBubble(ask, "ai");
-              speakThai(ask);
-            }, 3000);
-          }
-        }
-      }
-
-      function sendMsg(text) {
-        const message = text || userInput.value.trim();
-        if (!message) return;
-        addBubble(message, "user");
-        userInput.value = "";
-
-        if (editingIndex !== null) {
-          currentData[editingIndex] = message;
-          editingIndex = null;
-          showPreview();
-          return;
-        }
-
-        if (step === 0) {
-          if (["กิจกรรม", "activity"].includes(message))
-            selectedType = "activity";
-          else if (["สถานที่", "สถานที่ท่องเที่ยว", "place"].includes(message))
-            selectedType = "place";
-          else if (["ร้านอาหาร", "restaurant"].includes(message))
-            selectedType = "restaurant";
-          else if (["โรงแรม", "ที่พัก", "hotel"].includes(message))
-            selectedType = "hotel";
-          else {
-            reply(
-              "กรุณาระบุประเภทที่ต้องการสร้างค่ะ เช่น กิจกรรม สถานที่ท่องเที่ยว ร้านอาหาร หรือ โรงแรม"
-            );
-            return;
-          }
-          step = 1;
-          currentData = {};
-          askNext();
-        } else {
-          const questions = templates[selectedType];
-          currentData[step - 1] = message;
-          step++;
-          if (step <= questions.length) {
-            askNext();
-          } else {
-            showPreview();
-            step = 0;
-          }
-        }
-      }
-
-      function askNext() {
-        const question = templates[selectedType][step - 1];
-        addBubble(question, "ai");
-        speakThai(question);
-      }
-
-      function reply(text) {
-        addBubble(text, "ai");
-        speakThai(text);
-      }
-
-      function showPreview() {
-        const labels = templates[selectedType];
-        let html = '<div class="activity-box">';
-        labels.forEach((label, i) => {
-          html += `<p><b>${label}</b> ${
-            currentData[i] || ""
-          } <button onclick="editField(${i})">✏️</button></p>`;
-        });
-        html += `<button onclick="confirmActivity()">✅ ยืนยัน</button></div>`;
-        activityPreview.innerHTML = html;
-        reply(
-          "นี่คือสรุปข้อมูลใหม่ของคุณค่ะ ตรวจสอบด้านซ้าย แล้วกดแก้ไขหรือยืนยันได้เลย"
-        );
-      }
-
-      function editField(index) {
-        editingIndex = index;
-        const question = templates[selectedType][index];
-        reply("ตกลงค่ะ เราจะแก้ไขข้อนี้ใหม่นะคะ");
+    function toggleChat() {
+      const visible = chatBox.style.display === "flex";
+      chatBox.style.display = visible ? "none" : "flex";
+      if (!visible && chatMessages.childElementCount === 0) {
+        const greeting = `สวัสดีค่ะชุมชน ${communityName} พลอยใสยินดีให้บริการค่ะ 🌸`;
+        addBubble(greeting, "ai"); speakThai(greeting);
         setTimeout(() => {
-          reply(question);
-        }, 800);
+          const ask = "วันนี้อยากสร้างคอนเทนต์แบบไหนคะ (กิจกรรม, สถานที่ท่องเที่ยว, ร้านอาหาร, โรงแรม)?";
+          addBubble(ask, "ai"); speakThai(ask);
+        }, 1200);
+      }
+    }
+
+    function sendMsg(text) {
+      const message = text || userInput.value.trim();
+      if (!message) return;
+      addBubble(message, "user");
+      userInput.value = "";
+
+      if (editingIndex !== null) {
+        currentData[editingIndex] = message;
+        editingIndex = null;
+        showPreview();
+        return;
       }
 
-      function confirmActivity() {
-        const labels = templates[selectedType];
-        let html = '<div class="activity-box">';
-        labels.forEach((label, i) => {
-          html += `<p><b>${label}</b> ${currentData[i] || ""}</p>`;
-        });
-        html += `<button onclick="generateContent()">✨ สร้างโพสต์ด้วย AI</button>`;
-        html += "</div>";
-        const div = document.createElement("div");
-        div.className = "activity-box";
-        div.innerHTML = html;
-        activityList.prepend(div);
-        activityPreview.innerHTML = "";
-        reply("ข้อมูลถูกบันทึกเรียบร้อยแล้วค่ะ 🎉");
-      }
-
-      async function generateContent() {
-        const labels = templates[selectedType];
-        let prompt = `ช่วยเขียนโพสต์แนะนำหมวด "${selectedType}" โดยใช้ข้อมูลต่อไปนี้:\n`;
-        labels.forEach((label, i) => {
-          prompt += `- ${label}: ${currentData[i] || "-"}\n`;
-        });
-
-        reply("กำลังสร้างโพสต์จาก AI กรุณารอสักครู่...");
-
-        try {
-          const backendUrl =
-            location.hostname === "localhost"
-              ? "http://localhost:3001/generate"
-              : "/api/generate";
-
-          const res = await fetch(backendUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prompt }),
-          });
-
-          const data = await res.json();
-          const content = data.content;
-          if (content) {
-            document.getElementById("aiGeneratedContent").textContent = content;
-            document.getElementById("aiContentBox").style.display = "block";
-            reply(
-              "พลอยใสช่วยสร้างโพสต์ให้เรียบร้อยแล้วค่ะ ลองตรวจสอบดูว่าชอบไหมนะคะ 😊"
-            );
-          } else {
-            reply("ขออภัย ไม่สามารถสร้างโพสต์ได้ในขณะนี้");
-          }
-        } catch (err) {
-          console.error(err);
-          reply("เกิดข้อผิดพลาดในการเชื่อมต่อ AI");
-        }
-      }
-
-      function startVoice() {
-        if (!("webkitSpeechRecognition" in window)) {
-          alert("เบราว์เซอร์นี้ไม่รองรับ Speech Recognition");
+      if (step === 0) {
+        if (["กิจกรรม","activity"].includes(message)) selectedType = "activity";
+        else if (["สถานที่","สถานที่ท่องเที่ยว","place"].includes(message)) selectedType = "place";
+        else if (["ร้านอาหาร","restaurant"].includes(message)) selectedType = "restaurant";
+        else if (["โรงแรม","ที่พัก","hotel"].includes(message)) selectedType = "hotel";
+        else {
+          reply("กรุณาระบุประเภท: กิจกรรม / สถานที่ท่องเที่ยว / ร้านอาหาร / โรงแรม");
           return;
         }
-        const recognition = new webkitSpeechRecognition();
-        recognition.lang = "th-TH";
-        recognition.interimResults = false;
-        recognition.maxAlternatives = 1;
-        recognition.start();
-
-        recognition.onresult = function (event) {
-          const transcript = event.results[0][0].transcript;
-          sendMsg(transcript);
-        };
-
-        recognition.onerror = function (event) {
-          console.error("Voice error:", event.error);
-        };
+        step = 1; currentData = {}; askNext();
+      } else {
+        const questions = templates[selectedType];
+        currentData[step - 1] = message;
+        step++;
+        if (step <= questions.length) { askNext(); } else { showPreview(); step = 0; }
       }
+    }
 
-      userInput.addEventListener("keydown", function (event) {
-        if (event.key === "Enter") {
-          event.preventDefault();
-          sendMsg();
-        }
+    function askNext(){ const q = templates[selectedType][step - 1]; addBubble(q, "ai"); speakThai(q); }
+    function reply(text){ addBubble(text, "ai"); speakThai(text); }
+
+    function showPreview(){
+      const labels = templates[selectedType];
+      let html = '<div class="activity-box">';
+      labels.forEach((label, i) => {
+        html += `<p><b>${label}</b> ${currentData[i] || ""} <button class="btn secondary" style="padding:4px 8px" onclick="editField(${i})">✏️</button></p>`;
       });
+      html += `<div class="row"><button class="btn" onclick="confirmActivity()">✅ ยืนยัน</button></div></div>`;
+      activityPreview.innerHTML = html;
+      reply("นี่คือสรุปข้อมูลใหม่ของคุณค่ะ ตรวจสอบด้านซ้าย แล้วกดแก้ไขหรือยืนยันได้เลย");
+    }
 
-      function copyPostText() {
-        const content = document.getElementById("aiGeneratedContent").innerText;
-        navigator.clipboard
-          .writeText(content)
-          .then(() =>
-            alert("📋 คัดลอกข้อความเรียบร้อยแล้ว กรุณานำไปวางในโพสต์ Facebook")
-          )
-          .catch((err) => alert("เกิดข้อผิดพลาดในการคัดลอก"));
-      }
+    function editField(index){
+      editingIndex = index;
+      const q = templates[selectedType][index];
+      reply("ตกลงค่ะ เราจะแก้ไขข้อนี้ใหม่นะคะ");
+      setTimeout(() => reply(q), 600);
+    }
 
-      function openFacebookPost() {
-        const content = document.getElementById("aiGeneratedContent").innerText;
-        const fbUrl = `https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(
-          content
-        )}`;
-        window.open(fbUrl, "_blank");
+    function confirmActivity(){
+      const labels = templates[selectedType];
+      let html = '<div class="activity-box">';
+      labels.forEach((label, i) => { html += `<p><b>${label}</b> ${currentData[i] || ""}</p>`; });
+      html += `<div class="row"><button class="btn" onclick="generateContent()">✨ สร้างโพสต์ด้วย AI</button></div></div>`;
+      const div = document.createElement("div");
+      div.className = "activity-box";
+      div.innerHTML = html;
+      activityList.prepend(div);
+      activityPreview.innerHTML = "";
+      reply("ข้อมูลถูกบันทึกเรียบร้อยแล้วค่ะ 🎉");
+    }
+
+    async function generateContent(){
+      const labels = templates[selectedType];
+      let prompt = `ช่วยเขียนโพสต์แนะนำหมวด "${selectedType}" โดยใช้ข้อมูลต่อไปนี้:\n`;
+      labels.forEach((label, i) => prompt += `- ${label}: ${currentData[i] || "-"}\n`);
+
+      reply("กำลังสร้างโพสต์จาก AI กรุณารอสักครู่...");
+      try{
+        const backendUrl = location.hostname === "localhost" ? "http://localhost:3001/generate" : "/api/generate";
+        const res = await fetch(backendUrl, { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify({ prompt }) });
+        const data = await res.json();
+        const content = data.content;
+        if(content){
+          document.getElementById("aiGeneratedContent").textContent = content;
+          document.getElementById("aiContentBox").style.display = "block";
+          reply("พลอยใสช่วยสร้างโพสต์ให้เรียบร้อยแล้วค่ะ ลองตรวจสอบดูนะคะ 😊");
+        }else{
+          reply("ขออภัย ไม่สามารถสร้างโพสต์ได้ในขณะนี้");
+        }
+      }catch(err){
+        console.error(err);
+        reply("เกิดข้อผิดพลาดในการเชื่อมต่อ AI");
       }
-    </script>
-  </body>
+    }
+
+    function startVoice(){
+      if (!("webkitSpeechRecognition" in window)) { alert("เบราว์เซอร์นี้ไม่รองรับ Speech Recognition"); return; }
+      const recognition = new webkitSpeechRecognition();
+      recognition.lang = "th-TH"; recognition.interimResults = false; recognition.maxAlternatives = 1; recognition.start();
+      recognition.onresult = (e) => { const transcript = e.results[0][0].transcript; sendMsg(transcript); };
+      recognition.onerror = (e) => console.error("Voice error:", e.error);
+    }
+
+    userInput.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") { event.preventDefault(); sendMsg(); }
+    });
+
+    function copyPostText(){
+      const content = document.getElementById("aiGeneratedContent").innerText;
+      navigator.clipboard.writeText(content)
+        .then(() => alert("📋 คัดลอกข้อความเรียบร้อยแล้ว กรุณานำไปวางในโพสต์ Facebook"))
+        .catch(() => alert("เกิดข้อผิดพลาดในการคัดลอก"));
+    }
+
+    function openFacebookPost(){
+      const content = document.getElementById("aiGeneratedContent").innerText;
+      const fbUrl = `https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(content)}`;
+      window.open(fbUrl, "_blank");
+    }
+  </script>
+</body>
 </html>
