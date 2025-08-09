@@ -1,25 +1,161 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>เข้าสู่ระบบชุมชน</title>
   <style>
-    body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 50px; }
-    input, button { font-size: 18px; padding: 10px; margin: 10px; }
+    :root{
+      --bg1:#f3f4f6; --bg2:#e5e7eb;
+      --card:#ffffff; --text:#111827; --muted:#6b7280;
+      --primary:#16a34a; --primary-hover:#15803d; --ring: #22c55e;
+      --danger:#dc2626;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg1:#0b1220; --bg2:#111827;
+        --card:#0f172a; --text:#e5e7eb; --muted:#9ca3af;
+        --primary:#22c55e; --primary-hover:#16a34a; --ring:#22c55e;
+      }
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Thai", "Noto Sans", Arial, sans-serif;
+      color:var(--text);
+      background: radial-gradient(1200px 800px at 10% 10%, var(--bg2), transparent),
+                  radial-gradient(1200px 800px at 90% 90%, var(--bg2), transparent),
+                  linear-gradient(180deg, var(--bg1), var(--bg2));
+      display:grid; place-items:center; padding:24px;
+    }
+    .card{
+      width:100%; max-width: 520px;
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0,0,0,.15);
+      padding: 28px;
+      border: 1px solid rgba(0,0,0,.06);
+    }
+    .header{
+      display:flex; align-items:center; gap:12px; margin-bottom:8px;
+    }
+    .logo{
+      width:44px; height:44px; border-radius:12px;
+      display:grid; place-items:center; font-weight:700;
+      background: linear-gradient(135deg,#22c55e, #16a34a);
+      color:#fff; letter-spacing:.5px;
+    }
+    h1{font-size: clamp(20px, 2.5vw, 26px); margin:0}
+    p.sub{margin:6px 0 22px; color:var(--muted); font-size: 14px}
+    label{display:block; font-size:14px; margin-bottom:8px}
+    .input{
+      width:100%; font-size:16px; padding:14px 16px;
+      border-radius:12px; border:1px solid #d1d5db; background:transparent; color:var(--text);
+      outline:none; transition: box-shadow .15s, border-color .15s, transform .03s;
+    }
+    .input:focus{
+      border-color: var(--ring);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--ring) 20%, transparent);
+    }
+    .input[aria-invalid="true"]{border-color: var(--danger)}
+    .error{
+      margin-top:8px; color:var(--danger); font-size:13px; min-height:1.2em; /* reserve space */
+    }
+    .hint{margin-top:8px; color:var(--muted); font-size:13px}
+    .row{display:flex; gap:12px; align-items:center; margin-top:18px}
+    .btn{
+      flex:1; padding:14px 18px; font-size:16px; font-weight:600;
+      border:none; border-radius:12px; cursor:pointer;
+      background: var(--primary); color:white;
+      transition: transform .03s, filter .15s, background .15s, opacity .15s;
+    }
+    .btn:hover{background: var(--primary-hover)}
+    .btn:active{transform: translateY(1px)}
+    .btn:disabled{opacity:.6; cursor:not-allowed}
+    .footer{margin-top:18px; color:var(--muted); font-size:12px; text-align:center}
   </style>
 </head>
 <body>
-  <h2>กรอกชื่อชุมชนของคุณ</h2>
-  <input type="text" id="communityName" placeholder="เช่น บ้านทุ่งยางแดง" />
-  <button onclick="enterCommunity()">เข้าสู่ระบบ</button>
+  <main class="card" role="main">
+    <div class="header">
+      <div class="logo" aria-hidden="true">ช</div>
+      <div>
+        <h1>เข้าสู่ระบบชุมชน</h1>
+        <p class="sub">กรอกชื่อชุมชนเพื่อไปยังหน้าโปรไฟล์และเริ่มจัดการข้อมูลของคุณ</p>
+      </div>
+    </div>
+
+    <form id="communityForm" novalidate>
+      <label for="communityName">ชื่อชุมชน</label>
+      <input
+        class="input"
+        id="communityName"
+        name="communityName"
+        type="text"
+        inputmode="text"
+        autocomplete="organization"
+        placeholder="เช่น บ้านทุ่งยางแดง"
+        aria-describedby="nameHelp nameError"
+        aria-invalid="false"
+      />
+      <div id="nameError" class="error" role="alert" aria-live="polite"></div>
+      <div id="nameHelp" class="hint">ใช้ชื่อทางการหรือชื่อที่คนรู้จัก เพื่อค้นหาได้ง่าย</div>
+
+      <div class="row">
+        <button type="submit" id="submitBtn" class="btn" disabled>เข้าสู่ระบบ</button>
+      </div>
+    </form>
+
+    <div class="footer">รองรับทุกหน้าจอ • โหมดมืดอัตโนมัติ • กด Enter เพื่อยืนยัน</div>
+  </main>
 
   <script>
-    function enterCommunity() {
-      const name = document.getElementById('communityName').value.trim();
-      if (!name) return alert('กรุณากรอกชื่อชุมชน');
-      localStorage.setItem('communityName', name);
-      window.location.href = "profile.html";
-    }
+    (function(){
+      const form = document.getElementById('communityForm');
+      const input = document.getElementById('communityName');
+      const errorBox = document.getElementById('nameError');
+      const btn = document.getElementById('submitBtn');
+
+      // เปิดใช้งานปุ่มเมื่อมีข้อความ
+      const toggleButton = () => { btn.disabled = input.value.trim().length === 0; };
+      input.addEventListener('input', () => {
+        if (input.value.trim().length > 0) {
+          input.setAttribute('aria-invalid', 'false');
+          errorBox.textContent = '';
+        }
+        toggleButton();
+      });
+      toggleButton();
+
+      // กันช่องว่างล้วน ๆ
+      const validate = () => {
+        const name = input.value.trim();
+        if (!name) {
+          input.setAttribute('aria-invalid', 'true');
+          errorBox.textContent = 'กรุณากรอกชื่อชุมชน';
+          input.focus();
+          return null;
+        }
+        // กันช่องว่างเกิน 1 ช่องติดกัน
+        return name.replace(/\s{2,}/g, ' ');
+      };
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const validName = validate();
+        if (!validName) return;
+
+        try{
+          localStorage.setItem('communityName', validName);
+        }catch(err){
+          // ถ้า localStorage ใช้ไม่ได้ (เช่น โหมดส่วนตัวบางแบบ) ก็ข้ามเฉย ๆ
+          console.warn('localStorage unavailable', err);
+        }
+
+        // เปลี่ยนหน้า (ปรับได้ตามที่ต้องการ)
+        window.location.href = 'profile.html';
+      });
+    })();
   </script>
 </body>
 </html>
