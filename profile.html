@@ -1,842 +1,629 @@
 <!DOCTYPE html>
 <html lang="th">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>โปรไฟล์ชุมชน</title>
-    <style>
-      /* ---------- Theme Tokens ---------- */
-      :root {
-        --bg: #f6f7fb;
-        --card: #ffffff;
-        --text: #0f172a;
-        --muted: #64748b;
-        --border: #e2e8f0;
-        --primary: #16a34a;
-        --primary-600: #15803d;
-        --accent: #06b6d4;
-        --ai: #fce4ec;
-        --ai-text: #ad1457;
-        --user: #c8e6c9;
-        --user-text: #1b5e20;
-        --shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
-        --ring: #22c55e;
-      }
-      :root.theme-dark {
-        --bg: #0b1220;
-        --card: #0f172a;
-        --text: #e5e7eb;
-        --muted: #9ca3af;
-        --border: #243041;
-        --primary: #22c55e;
-        --primary-600: #16a34a;
-        --accent: #22d3ee;
-        --ai: #2b1d24;
-        --ai-text: #f8b4c8;
-        --user: #19321b;
-        --user-text: #b7f7bf;
-        --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-        --ring: #22c55e;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>โปรไฟล์ชุมชน</title>
+  <style>
+    /* ---------- Theme Tokens ---------- */
+    :root{
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --primary: #16a34a;
+      --primary-600:#15803d;
+      --accent: #06b6d4;
+      --ai: #fce4ec;
+      --ai-text:#ad1457;
+      --user:#c8e6c9;
+      --user-text:#1b5e20;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+      --ring: #22c55e;
+    }
+    :root.theme-dark{
+      --bg: #0b1220;
+      --card: #0f172a;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border:#243041;
+      --primary:#22c55e;
+      --primary-600:#16a34a;
+      --accent:#22d3ee;
+      --ai:#2b1d24;
+      --ai-text:#f8b4c8;
+      --user:#19321b;
+      --user-text:#b7f7bf;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --ring:#22c55e;
+    }
 
-      * {
-        box-sizing: border-box;
-      }
-      html,
-      body {
-        height: 100%;
-      }
-      body {
-        margin: 0;
-        font-family: system-ui, -apple-system, "Segoe UI", Roboto,
-          "Noto Sans Thai", "Noto Sans", Arial, sans-serif;
-        color: var(--text);
-        background: radial-gradient(
-            1000px 600px at 10% 0%,
-            rgba(34, 197, 94, 0.08),
-            transparent
-          ),
-          radial-gradient(
-            1000px 600px at 90% 100%,
-            rgba(6, 182, 212, 0.08),
-            transparent
-          ),
-          var(--bg);
-        padding: 20px;
-        transition: background 0.25s ease, color 0.2s ease;
-      }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Thai", "Noto Sans", Arial, sans-serif;
+      color:var(--text); background:
+        radial-gradient(1000px 600px at 10% 0%, rgba(34,197,94,.08), transparent),
+        radial-gradient(1000px 600px at 90% 100%, rgba(6,182,212,.08), transparent),
+        var(--bg);
+      padding: 20px;
+      transition: background .25s ease, color .2s ease;
+    }
 
-      /* ---------- Layout ---------- */
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        display: grid;
-        gap: 24px;
-        grid-template-columns: 1fr 320px;
-      }
-      @media (max-width: 960px) {
-        .container {
-          grid-template-columns: 1fr;
-        }
-      }
+    /* ---------- Layout ---------- */
+    .container{
+      max-width: 1200px; margin: 0 auto;
+      display: grid; gap: 24px;
+      grid-template-columns: 1fr 320px;
+    }
+    @media (max-width: 960px){ .container{ grid-template-columns: 1fr; } }
 
-      .card {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 18px;
-        box-shadow: var(--shadow);
-        padding: 20px;
-      }
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
 
-      /* ---------- Header ---------- */
-      .page-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        margin-bottom: 16px;
-      }
-      .title {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-      .logo {
-        width: 42px;
-        height: 42px;
-        border-radius: 12px;
-        display: grid;
-        place-items: center;
-        background: linear-gradient(135deg, var(--primary), var(--accent));
-        color: #fff;
-        font-weight: 700;
-      }
-      h1 {
-        margin: 0;
-        font-size: clamp(20px, 2.5vw, 28px);
-      }
-      .meta {
-        color: var(--muted);
-        font-size: 14px;
-        margin-top: 4px;
-      }
+    /* ---------- Header ---------- */
+    .page-header{
+      display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom: 16px;
+    }
+    .title{ display:flex; align-items:center; gap:12px; }
+    .logo{
+      width:42px; height:42px; border-radius:12px; display:grid; place-items:center;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color:#fff; font-weight:700;
+    }
+    h1{margin:0; font-size: clamp(20px, 2.5vw, 28px);}
+    .meta{color:var(--muted); font-size: 14px; margin-top:4px}
 
-      /* ---------- Sidebar ---------- */
-      .sidebar h2 {
-        margin: 0 0 10px;
-      }
-      .activity-box {
-        border: 1px solid var(--border);
-        background: color-mix(in srgb, var(--card) 90%, var(--bg));
-        border-radius: 12px;
-        padding: 12px;
-        margin-bottom: 12px;
-      }
-      .preview .activity-box {
-        outline: 2px dashed color-mix(in srgb, var(--ring) 40%, transparent);
-      }
+    /* ---------- Sidebar ---------- */
+    .sidebar h2{margin: 0 0 10px}
+    .activity-box{
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--card) 90%, var(--bg));
+      border-radius: 12px;
+      padding: 12px; margin-bottom:12px;
+    }
+    .preview .activity-box{ outline: 2px dashed color-mix(in srgb, var(--ring) 40%, transparent); }
 
-      /* ---------- AI content ---------- */
-      #aiContentBox {
-        display: none;
-      }
-      .ai-card {
-        background: color-mix(in srgb, var(--card) 85%, var(--ai));
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 16px;
-      }
-      .ai-actions {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-top: 10px;
-      }
-      .btn {
-        appearance: none;
-        border: none;
-        cursor: pointer;
-        padding: 10px 14px;
-        border-radius: 10px;
-        font-weight: 600;
-        background: var(--primary);
-        color: #fff;
-        transition: transform 0.03s, background 0.15s, opacity 0.15s,
-          box-shadow 0.15s;
-        box-shadow: 0 4px 14px rgba(34, 197, 94, 0.25);
-      }
-      .btn:hover {
-        background: var(--primary-600);
-      }
-      .btn.secondary {
-        background: #6b7280;
-        box-shadow: none;
-      }
-      .btn.fb {
-        background: #4267b2;
-      }
-      .btn:active {
-        transform: translateY(1px);
-      }
+    /* ---------- AI content ---------- */
+    #aiContentBox{ display:none }
+    .ai-card{
+      background: color-mix(in srgb, var(--card) 85%, var(--ai) );
+      border:1px solid var(--border);
+      border-radius: 12px; padding:16px;
+    }
+    .ai-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    .btn{
+      appearance:none; border:none; cursor:pointer;
+      padding:10px 14px; border-radius:10px; font-weight:600;
+      background: var(--primary); color:#fff;
+      transition: transform .03s, background .15s, opacity .15s, box-shadow .15s;
+      box-shadow: 0 4px 14px rgba(34,197,94,.25);
+    }
+    .btn:hover{ background: var(--primary-600) }
+    .btn.secondary{ background: #6b7280; box-shadow: none; }
+    .btn.fb{ background:#4267b2; }
+    .btn:active{ transform: translateY(1px) }
 
-      /* ---------- Chat trigger button ---------- */
-      .chat-button {
-        position: fixed;
-        left: 50%;
-        transform: translateX(-50%);
+    /* ---------- Chat trigger button ---------- */
+    .chat-button{
+      position: fixed;
+      left: 50%; transform: translateX(-50%);
+      bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+      background: var(--primary); color:#fff; padding: 14px 20px; border-radius: 999px;
+      font-size: 16px; cursor: pointer; box-shadow: var(--shadow); z-index: 1000; border: none;
+      transition: opacity .15s ease;
+    }
+    /* มือถือ: ย้ายปุ่มไปล่างขวา และซ่อนเมื่อเปิดแชท */
+    @media (max-width: 768px){
+      .chat-button{
+        right: 16px; left: auto; transform: none;
         bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-        background: var(--primary);
-        color: #fff;
-        padding: 14px 20px;
-        border-radius: 999px;
-        font-size: 16px;
-        cursor: pointer;
-        box-shadow: var(--shadow);
-        z-index: 1000;
-        border: none;
-        transition: opacity 0.15s ease;
       }
-      /* มือถือ: ย้ายปุ่มไปล่างขวา และซ่อนเมื่อเปิดแชท */
-      @media (max-width: 768px) {
-        .chat-button {
-          right: 16px;
-          left: auto;
-          transform: none;
-          bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-        }
-        body.chat-open .chat-button {
-          opacity: 0;
-          pointer-events: none;
-        }
+      body.chat-open .chat-button{
+        opacity: 0; pointer-events: none;
       }
+    }
 
-      /* ---------- Chat box ---------- */
-      #chatBox {
-        position: fixed;
-        right: 16px;
-        bottom: calc(80px + env(safe-area-inset-bottom, 0px));
-        width: min(380px, 94vw);
-        height: 520px;
-        display: none;
-        flex-direction: column;
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        box-shadow: var(--shadow);
-        z-index: 999;
-        overflow: hidden;
-      }
-      #chatMessages {
-        flex: 1;
-        overflow-y: auto;
-        padding: 12px;
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        scroll-behavior: smooth;
-      }
-      .bubble {
-        max-width: 85%;
-        padding: 8px 12px;
-        border-radius: 12px;
-        margin: 2px 0;
-        word-wrap: break-word;
-        line-height: 1.35;
-        border: 1px solid var(--border);
-      }
-      .ai {
-        align-self: flex-start;
-        background: var(--ai);
-        color: var(--ai-text);
-      }
-      .user {
-        align-self: flex-end;
-        background: var(--user);
-        color: var(--user-text);
-      }
+    /* ---------- Chat box ---------- */
+    #chatBox{
+      position: fixed;
+      right: 16px;
+      bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+      width: min(380px, 94vw);
+      height: 520px;
+      display:none; flex-direction: column;
+      background: var(--card); border:1px solid var(--border);
+      border-radius: 14px; box-shadow: var(--shadow);
+      z-index: 999; overflow: hidden;
+    }
+    #chatMessages{
+      flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:6px;
+      scroll-behavior: smooth;
+    }
+    .bubble{
+      max-width: 85%; padding: 8px 12px; border-radius: 12px; margin: 2px 0;
+      word-wrap: break-word; line-height:1.35; border: 1px solid var(--border);
+    }
+    .ai{ align-self:flex-start; background: var(--ai); color: var(--ai-text); }
+    .user{ align-self:flex-end; background: var(--user); color: var(--user-text); }
 
-      /* Chat input bar */
-      #chatInput {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px;
-        border-top: 1px solid var(--border);
-        background: var(--card);
-        width: 100%;
-      }
-      #chatInput input {
-        font-size: 16px; /* กัน iOS ซูม */
-        flex: 1;
-        min-width: 0;
-        padding: 12px 14px;
-        border: none;
-        background: transparent;
-        color: var(--text);
-        outline: none;
-      }
-      #chatInput .send-btn {
-        flex: 0 0 auto;
-        min-width: 88px;
-        border: none;
-        background: var(--primary);
-        color: #fff;
-        padding: 10px 14px;
-        border-radius: 10px;
-        font-weight: 600;
-        cursor: pointer;
-      }
-      #chatInput .voice-btn {
-        flex: 0 0 auto;
-        min-width: 56px;
-        border: none;
-        background: #f59e0b;
-        color: #fff;
-        padding: 10px 12px;
-        border-radius: 10px;
-        font-weight: 700;
-        cursor: pointer;
-      }
-      @media (max-width: 480px) {
-        #chatInput .send-btn {
-          padding: 12px 16px;
-          font-size: 16px;
-        }
-        #chatInput .voice-btn {
-          padding: 12px 14px;
-          font-size: 18px;
-        }
-      }
+    /* Chat input bar */
+    #chatInput{
+      display:flex; align-items:center; gap: 8px; padding: 8px;
+      border-top:1px solid var(--border); background: var(--card); width: 100%;
+    }
+    #chatInput input{
+      font-size:16px; /* กัน iOS ซูม */
+      flex:1; min-width: 0; padding:12px 14px; border:none; background:transparent; color:var(--text); outline:none;
+    }
+    #chatInput .send-btn{
+      flex: 0 0 auto; min-width: 88px; border:none; background: var(--primary); color:#fff;
+      padding: 10px 14px; border-radius: 10px; font-weight: 600; cursor:pointer;
+    }
+    #chatInput .voice-btn{
+      flex: 0 0 auto; min-width: 56px; border:none; background:#f59e0b; color:#fff;
+      padding: 10px 12px; border-radius: 10px; font-weight: 700; cursor:pointer;
+    }
+    @media (max-width: 480px){
+      #chatInput .send-btn{ padding: 12px 16px; font-size: 16px; }
+      #chatInput .voice-btn{ padding: 12px 14px; font-size: 18px; }
+    }
 
-      /* ---------- Theme Toggle ---------- */
-      .theme-toggle {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        background: transparent;
-        color: var(--text);
-        border: 1px solid var(--border);
-        padding: 8px 12px;
-        border-radius: 999px;
-        cursor: pointer;
-      }
-      .theme-toggle:hover {
-        background: color-mix(in srgb, var(--bg) 60%, transparent);
-      }
-      .theme-toggle svg {
-        width: 18px;
-        height: 18px;
-        display: block;
-      }
+    /* ---------- Theme Toggle ---------- */
+    .theme-toggle{
+      display:inline-flex; align-items:center; gap:8px;
+      background: transparent; color: var(--text);
+      border:1px solid var(--border); padding:8px 12px; border-radius: 999px; cursor: pointer;
+    }
+    .theme-toggle:hover{ background: color-mix(in srgb, var(--bg) 60%, transparent); }
+    .theme-toggle svg{ width:18px; height:18px; display:block }
 
-      /* ---------- Utilities ---------- */
-      .row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        align-items: center;
-      }
-      .muted {
-        color: var(--muted);
-      }
-      pre,
-      textarea {
-        white-space: pre-wrap;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <!-- Main -->
-      <section class="card">
-        <header class="page-header">
-          <div class="title">
-            <div class="logo" aria-hidden="true">ช</div>
-            <div>
-              <h1 id="communityTitle">โปรไฟล์ชุมชน</h1>
-              <div class="meta">ข้อมูลภาพรวมและเครื่องมือช่วยสร้างคอนเทนต์</div>
-            </div>
-          </div>
-          <button
-            id="themeToggle"
-            class="theme-toggle"
-            type="button"
-            aria-pressed="false"
-          >
-            <span id="themeIcon" aria-hidden="true"></span>
-            <span id="themeText">โหมดสว่าง</span>
-          </button>
-        </header>
-
-        <div class="row muted" style="gap: 18px; margin-bottom: 10px">
-          <div>👥 จำนวนสมาชิก: 125 คน</div>
-          <div>📅 กิจกรรมล่าสุด: ประชุมหมู่บ้าน 28 ก.ค. 2025</div>
-          <div>📢 ข่าวประกาศ: เชิญร่วมกิจกรรมปลูกป่า 10 ส.ค. 2025</div>
-        </div>
-
-        <div id="aiContentBox" class="ai-card">
-          <h2 style="margin: 0 0 8px">📢 โพสต์ที่สร้างจาก AI</h2>
-          <p id="aiGeneratedContent"></p>
-          <div class="muted" style="font-size: 12px">
-            💡 เพิ่มภาพกิจกรรม/สถานที่ประกอบโพสต์ได้ภายหลัง
-          </div>
-          <div class="ai-actions">
-            <button class="btn secondary" onclick="copyPostText()">
-              📋 คัดลอกข้อความ
-            </button>
-            <button class="btn fb" onclick="openFacebookPost()">
-              📤 โพสต์บน Facebook
-            </button>
+    /* ---------- Utilities ---------- */
+    .row{ display:flex; flex-wrap:wrap; gap:10px; align-items:center }
+    .muted{ color: var(--muted) }
+    pre, textarea { white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Main -->
+    <section class="card">
+      <header class="page-header">
+        <div class="title">
+          <div class="logo" aria-hidden="true">ช</div>
+          <div>
+            <h1 id="communityTitle">โปรไฟล์ชุมชน</h1>
+            <div class="meta">ข้อมูลภาพรวมและเครื่องมือช่วยสร้างคอนเทนต์</div>
           </div>
         </div>
-      </section>
-
-      <!-- Sidebar -->
-      <aside class="sidebar">
-        <div class="card">
-          <h2>โพสต์ล่าสุด</h2>
-          <div id="activityList"></div>
-        </div>
-        <div class="card preview" style="margin-top: 16px">
-          <h2>โพสต์ใหม่ (Preview)</h2>
-          <div id="activityPreview"></div>
-        </div>
-      </aside>
-    </div>
-
-    <!-- Chat -->
-    <div id="chatBox" role="dialog" aria-label="กล่องแชทพลอยใส">
-      <div id="chatMessages"></div>
-      <div id="chatInput">
-        <input
-          type="text"
-          id="userMsg"
-          placeholder="พิมพ์ข้อความหรือกด 🎤..."
-        />
-        <button class="send-btn" onclick="sendMsg()" aria-label="ส่งข้อความ">
-          ส่ง
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false">
+          <span id="themeIcon" aria-hidden="true"></span>
+          <span id="themeText">โหมดสว่าง</span>
         </button>
-        <button
-          class="voice-btn"
-          id="voiceBtn"
-          onclick="startVoice()"
-          aria-label="เริ่มพูด"
-        >
-          🎤
-        </button>
+      </header>
+
+      <div class="row muted" style="gap:18px; margin-bottom:10px">
+        <div>👥 จำนวนสมาชิก: 125 คน</div>
+        <div>📅 กิจกรรมล่าสุด: ประชุมหมู่บ้าน 28 ก.ค. 2025</div>
+        <div>📢 ข่าวประกาศ: เชิญร่วมกิจกรรมปลูกป่า 10 ส.ค. 2025</div>
       </div>
+
+      <div id="aiContentBox" class="ai-card">
+        <h2 style="margin:0 0 8px">📢 โพสต์ที่สร้างจาก AI</h2>
+        <p id="aiGeneratedContent"></p>
+        <div class="muted" style="font-size:12px">💡 เพิ่มภาพกิจกรรม/สถานที่ประกอบโพสต์ได้ภายหลัง</div>
+        <div class="ai-actions">
+          <button class="btn" id="shortenBtn" onclick="shortenContent()">✂️ ปรับให้กระชับ</button>
+          <button class="btn secondary" onclick="copyPostText()">📋 คัดลอกข้อความ</button>
+          <button class="btn fb" onclick="openFacebookPost()">📤 โพสต์บน Facebook</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="card">
+        <h2>โพสต์ล่าสุด</h2>
+        <div id="activityList"></div>
+      </div>
+      <div class="card preview" style="margin-top:16px">
+        <h2>โพสต์ใหม่ (Preview)</h2>
+        <div id="activityPreview"></div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Chat -->
+  <div id="chatBox" role="dialog" aria-label="กล่องแชทพลอยใส">
+    <div id="chatMessages"></div>
+    <div id="chatInput">
+      <input type="text" id="userMsg" placeholder="พิมพ์ข้อความหรือกด 🎤..." />
+      <button class="send-btn" onclick="sendMsg()" aria-label="ส่งข้อความ">ส่ง</button>
+      <button class="voice-btn" id="voiceBtn" onclick="startVoice()" aria-label="เริ่มพูด">🎤</button>
     </div>
-    <button class="chat-button" onclick="toggleChat()">💬 คุยกับพลอยใส</button>
+  </div>
+  <button class="chat-button" onclick="toggleChat()">💬 คุยกับพลอยใส</button>
 
-    <script>
-      /* ---------- Google Sheet Web App URL ---------- */
-      const SHEET_WEBAPP_URL =
-        "https://script.google.com/macros/s/AKfycbytFw47IImwEIQyzT9H81-ESYEnwnML4O_c8G5_wJMXtrwUV3kYx4I89CV6IS2F710R/exec";
-        
+  <script>
+    /* ---------- Google Sheet Web App URL ---------- */
+    const SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyRiQ40M8zo9wDdniSXfMu73_sAgqjGA8XK-c3kian9oAp8mE7xp-z0ysCZtfdKfiSJ/exec";
 
-      async function sendToSheet(payload) {
-        try {
-          await fetch(SHEET_WEBAPP_URL, {
-            method: "POST",
-            // สำคัญ: no-cors + text/plain จะไม่ทำ preflight
-            mode: "no-cors",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify(payload),
-          });
-          // หมายเหตุ: โหมด no-cors จะอ่าน response ไม่ได้ ซึ่งโอเคสำหรับ use-case นี้
-        } catch (err) {
-          console.warn("Send to sheet fail:", err);
-        }
-      }
-
-      /* ---------- Init Community Title ---------- */
-      const communityName =
-        localStorage.getItem("communityName") || "ชุมชนของคุณ";
-      document.getElementById("communityTitle").textContent =
-        "🏡 " + communityName;
-
-      /* ---------- Elements ---------- */
-      const chatBox = document.getElementById("chatBox");
-      const chatMessages = document.getElementById("chatMessages");
-      const userInput = document.getElementById("userMsg");
-      const activityPreview = document.getElementById("activityPreview");
-      const activityList = document.getElementById("activityList");
-
-      /* ---------- Theme Toggle ---------- */
-      const root = document.documentElement;
-      const tBtn = document.getElementById("themeToggle");
-      const tIcon = document.getElementById("themeIcon");
-      const tText = document.getElementById("themeText");
-
-      function themeIcon(mode) {
-        const sun =
-          '<svg viewBox="0 0 24 24" fill="none"><path d="M12 4V2m0 20v-2M4 12H2m20 0h-2M5 5 3.6 3.6M20.4 20.4 19 19m0-14 1.4-1.4M5 19 3.6 20.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/></svg>';
-        const moon =
-          '<svg viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-        tIcon.innerHTML = mode === "dark" ? moon : sun;
-        tText.textContent = mode === "dark" ? "โหมดมืด" : "โหมดสว่าง";
-        tBtn.setAttribute("aria-pressed", mode === "dark");
-      }
-      function applyTheme(mode) {
-        root.classList.toggle("theme-dark", mode === "dark");
-        themeIcon(mode);
-        try {
-          localStorage.setItem("theme", mode);
-        } catch (e) {}
-      }
-      function detectTheme() {
-        const saved = localStorage.getItem("theme");
-        if (saved) return saved;
-        return window.matchMedia &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "dark"
-          : "light";
-      }
-      (function () {
-        applyTheme(detectTheme());
-      })();
-      tBtn.addEventListener("click", () =>
-        applyTheme(root.classList.contains("theme-dark") ? "light" : "dark")
-      );
-
-      /* ---------- Chat helpers ---------- */
-      function scrollChatToBottom() {
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-          });
+    async function sendToSheet(payload){
+      try{
+        await fetch(SHEET_WEBAPP_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // no-cors friendly
+          body: JSON.stringify(payload),
+          mode: 'no-cors'
         });
+      }catch(err){
+        console.warn('Send to sheet fail:', err);
       }
-      function showChat() {
-        chatBox.style.display = "flex";
-        document.body.classList.add("chat-open");
-        setTimeout(() => {
-          userInput?.focus();
-          scrollChatToBottom();
-        }, 50);
+    }
+
+    /* ---------- Backend URL helpers ---------- */
+    function getBackendUrl(){
+      if (location.hostname === 'localhost' || location.protocol === 'file:') {
+        return 'http://localhost:3001/generate'; // เปลี่ยนเป็นพอร์ต/โดเมนแบ็กเอนด์จริงของคุณได้
       }
-      function minimizeChat() {
-        chatBox.style.display = "none";
-        document.body.classList.remove("chat-open");
+      return '/api/generate';
+    }
+    async function fetchJSON(url, options={}){
+      const res = await fetch(url, options);
+      if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+      const ct = res.headers.get('content-type') || '';
+      if (ct.includes('application/json')) return res.json();
+      const t = await res.text();
+      try { return JSON.parse(t); } catch { throw new Error('ไม่พบ JSON จากเซิร์ฟเวอร์'); }
+    }
+
+    /* ---------- Init Community Title ---------- */
+    const communityName = localStorage.getItem("communityName") || "ชุมชนของคุณ";
+    document.getElementById("communityTitle").textContent = "🏡 " + communityName;
+
+    /* ---------- Elements ---------- */
+    const chatBox = document.getElementById("chatBox");
+    const chatMessages = document.getElementById("chatMessages");
+    const userInput = document.getElementById("userMsg");
+    const activityPreview = document.getElementById("activityPreview");
+    const activityList = document.getElementById("activityList");
+    const aiContentEl = document.getElementById("aiGeneratedContent");
+    const aiBox = document.getElementById("aiContentBox");
+    const shortenBtn = document.getElementById("shortenBtn");
+
+    /* ---------- Theme Toggle ---------- */
+    const root = document.documentElement;
+    const tBtn = document.getElementById("themeToggle");
+    const tIcon = document.getElementById("themeIcon");
+    const tText = document.getElementById("themeText");
+
+    function themeIcon(mode){
+      const sun = '<svg viewBox="0 0 24 24" fill="none"><path d="M12 4V2m0 20v-2M4 12H2m20 0h-2M5 5 3.6 3.6M20.4 20.4 19 19m0-14 1.4-1.4M5 19 3.6 20.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/></svg>';
+      const moon = '<svg viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      tIcon.innerHTML = mode === 'dark' ? moon : sun;
+      tText.textContent = mode === 'dark' ? 'โหมดมืด' : 'โหมดสว่าง';
+      tBtn.setAttribute('aria-pressed', mode === 'dark');
+    }
+    function applyTheme(mode){
+      root.classList.toggle('theme-dark', mode === 'dark');
+      themeIcon(mode);
+      try{ localStorage.setItem('theme', mode); }catch(e){}
+    }
+    function detectTheme(){
+      const saved = localStorage.getItem('theme');
+      if(saved) return saved;
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light';
+    }
+    (function(){ applyTheme(detectTheme()); })();
+    tBtn.addEventListener('click', () => applyTheme(root.classList.contains('theme-dark') ? 'light' : 'dark'));
+
+    /* ---------- Chat helpers ---------- */
+    function scrollChatToBottom(){
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
+      });
+    }
+    function showChat(){
+      chatBox.style.display = 'flex';
+      document.body.classList.add('chat-open');
+      setTimeout(() => { userInput?.focus(); scrollChatToBottom(); }, 50);
+    }
+    function minimizeChat(){
+      chatBox.style.display = 'none';
+      document.body.classList.remove('chat-open');
+    }
+
+    /* ---------- Chat & Flow ---------- */
+    let step = 0;
+    let selectedType = "activity";
+    let currentData = {};
+    let editingIndex = null;
+
+    const templates = {
+      activity: [
+        "ชื่อกิจกรรมคืออะไรคะ?",
+        "รายละเอียดกิจกรรมเป็นอย่างไรบ้างคะ?",
+        "กิจกรรมจัดวันไหนคะ?",
+        "จัดที่ไหน? (ระบุสถานที่จัด)",
+        "ต้องลงทะเบียนไหม? มีค่าใช้จ่ายหรือเปล่าคะ?",
+      ],
+      place: [
+        "สถานที่ท่องเที่ยวชื่อว่าอะไรคะ?",
+        "อยู่ที่ตำบล/อำเภอไหนคะ?",
+        "มีอะไรน่าสนใจบ้าง?",
+        "เดินทางไปยังไงได้บ้าง?",
+        "เปิด-ปิดวันไหน? เวลาใด?",
+        "มีค่าเข้าชมหรือไม่คะ?",
+      ],
+      restaurant: [
+        "ชื่อร้านอาหารคืออะไรคะ?",
+        "ร้านนี้อยู่ที่ไหน?",
+        "จุดเด่นของร้านคืออะไรบ้าง?",
+        "เปิด-ปิดวันไหน? เวลาใด?",
+        "มีช่องทางติดต่อหรือโซเชียลมีเดียไหมคะ?",
+      ],
+      hotel: [
+        "โรงแรม/ที่พักชื่อว่าอะไรคะ?",
+        "ตั้งอยู่ที่ไหนคะ?",
+        "จุดเด่นหรือบรรยากาศเป็นแบบไหนคะ?",
+        "มีห้องพักแบบใดบ้าง? ราคาเริ่มต้นที่เท่าไหร่?",
+        "ติดต่อจองที่พักได้ช่องทางใดบ้างคะ?",
+      ],
+      /* ---- NEW: ร้านค้า ---- */
+      shop: [
+        "ชื่อร้านค้าของคุณคืออะไรคะ?",
+        "ร้านตั้งอยู่ที่ไหนคะ? (ที่อยู่/จุดสังเกต/แผงที่ตลาด)",
+        "ร้านขายอะไรเป็นหลักคะ? (เช่น ผลไม้ เสื้อผ้า ของฝาก ของใช้ ฯลฯ)",
+        "เวลาเปิด-ปิดร้านคือกี่โมงคะ?",
+        "มีจุดเด่น/โปรโมชั่นอะไรที่อยากบอกลูกค้าบ้างคะ?",
+        "มีช่องทางติดต่อหรือโซเชียลมีเดียของร้านไหมคะ?",
+      ],
+    };
+
+    /* จับหมวดจากคีย์เวิร์ด (ยืดหยุ่น) */
+    function detectCategory(message){
+      const msg = (message || "").toLowerCase().trim();
+      const kwActivity = ['กิจกรรม','เพิ่มกิจกรรม','งาน','event','อีเวนท์','จัดงาน','เวิร์กช็อป','workshop'];
+      const kwPlace    = ['สถานที่','สถานที่ท่องเที่ยว','ท่องเที่ยว','เที่ยว','แหล่งท่องเที่ยว','แลนด์มาร์ก','place','แหล่งเที่ยว','tourist'];
+      const kwRestaurant=['ร้านอาหาร','ร้านกิน','กิน','ของกิน','อาหาร','คาเฟ่','ร้านกาแฟ','restaurant','เมนู','cafe','coffee'];
+      const kwHotel    = ['โรงแรม','ที่พัก','โฮสเทล','รีสอร์ท','เกสต์เฮ้าส์','hotel','hostel','จองที่พัก','ห้องพัก','resort'];
+      const kwShop     = ['ร้านค้า','ตลาด','ขายของ','ร้านขายผลไม้','แผงผลไม้','shop','market','store','ของฝาก','ของใช้','ค้าปลีก','ขายผลไม้','ซุปเปอร์','มินิมาร์ท'];
+      const hit = (arr) => arr.some(k => msg.includes(k));
+      if (hit(kwActivity))   return 'activity';
+      if (hit(kwPlace))      return 'place';
+      if (hit(kwRestaurant)) return 'restaurant';
+      if (hit(kwHotel))      return 'hotel';
+      if (hit(kwShop))       return 'shop';
+      return null;
+    }
+
+    function speakThai(text) {
+      const cleaned = text.replace(/[\p{Emoji_Presentation}\p{Emoji}\u200d]+/gu, "");
+      if ("speechSynthesis" in window) {
+        const u = new SpeechSynthesisUtterance(cleaned);
+        u.lang = "th-TH";
+        const v = speechSynthesis.getVoices().filter(x => x.lang.startsWith("th"));
+        if (v.length > 0) u.voice = v[0];
+        speechSynthesis.speak(u);
       }
+    }
 
-      /* ---------- Chat & Flow ---------- */
-      let step = 0;
-      let selectedType = "activity";
-      let currentData = {};
-      let editingIndex = null;
+    function addBubble(text, sender) {
+      const div = document.createElement("div");
+      div.className = "bubble " + sender;
+      div.textContent = text;
+      chatMessages.appendChild(div);
+      scrollChatToBottom();
+    }
+    function reply(text){ addBubble(text, "ai"); speakThai(text); }
 
-      const templates = {
-        activity: [
-          "ชื่อกิจกรรมคืออะไรคะ?",
-          "รายละเอียดกิจกรรมเป็นอย่างไรบ้างคะ?",
-          "กิจกรรมจัดวันไหนคะ?",
-          "จัดที่ไหน? (ระบุสถานที่จัด)",
-          "ต้องลงทะเบียนไหม? มีค่าใช้จ่ายหรือเปล่าคะ?",
-        ],
-        place: [
-          "สถานที่ท่องเที่ยวชื่อว่าอะไรคะ?",
-          "อยู่ที่ตำบล/อำเภอไหนคะ?",
-          "มีอะไรน่าสนใจบ้าง?",
-          "เดินทางไปยังไงได้บ้าง?",
-          "เปิด-ปิดวันไหน? เวลาใด?",
-          "มีค่าเข้าชมหรือไม่คะ?",
-        ],
-        restaurant: [
-          "ชื่อร้านอาหารคืออะไรคะ?",
-          "ร้านนี้อยู่ที่ไหน?",
-          "จุดเด่นของร้านคืออะไรบ้าง?",
-          "เปิด-ปิดวันไหน? เวลาใด?",
-          "มีช่องทางติดต่อหรือโซเชียลมีเดียไหมคะ?",
-        ],
-        hotel: [
-          "โรงแรม/ที่พักชื่อว่าอะไรคะ?",
-          "ตั้งอยู่ที่ไหนคะ?",
-          "จุดเด่นหรือบรรยากาศเป็นแบบไหนคะ?",
-          "มีห้องพักแบบใดบ้าง? ราคาเริ่มต้นที่เท่าไหร่?",
-          "ติดต่อจองที่พักได้ช่องทางใดบ้างคะ?",
-        ],
-      };
-
-      function detectCategory(message) {
-        const msg = (message || "").toLowerCase().trim();
-        const kwActivity = [
-          "กิจกรรม",
-          "เพิ่มกิจกรรม",
-          "งาน",
-          "event",
-          "อีเวนท์",
-          "จัดงาน",
-          "เวิร์กช็อป",
-          "workshop",
-        ];
-        const kwPlace = [
-          "สถานที่",
-          "สถานที่ท่องเที่ยว",
-          "ท่องเที่ยว",
-          "เที่ยว",
-          "แหล่งท่องเที่ยว",
-          "แลนด์มาร์ก",
-          "place",
-          "แหล่งเที่ยว",
-        ];
-        const kwRestaurant = [
-          "ร้านอาหาร",
-          "ร้านกิน",
-          "กิน",
-          "ของกิน",
-          "อาหาร",
-          "คาเฟ่",
-          "ร้านกาแฟ",
-          "restaurant",
-          "เมนู",
-          "ร้าน",
-        ];
-        const kwHotel = [
-          "โรงแรม",
-          "ที่พัก",
-          "โฮสเทล",
-          "รีสอร์ท",
-          "เกสต์เฮ้าส์",
-          "hotel",
-          "hostel",
-          "จองที่พัก",
-          "ห้องพัก",
-        ];
-        const hit = (arr) => arr.some((k) => msg.includes(k));
-        if (hit(kwActivity)) return "activity";
-        if (hit(kwPlace)) return "place";
-        if (hit(kwRestaurant)) return "restaurant";
-        if (hit(kwHotel)) return "hotel";
-        return null;
-      }
-
-      function speakThai(text) {
-        const cleaned = text.replace(
-          /[\p{Emoji_Presentation}\p{Emoji}\u200d]+/gu,
-          ""
-        );
-        if ("speechSynthesis" in window) {
-          const u = new SpeechSynthesisUtterance(cleaned);
-          u.lang = "th-TH";
-          const v = speechSynthesis
-            .getVoices()
-            .filter((x) => x.lang.startsWith("th"));
-          if (v.length > 0) u.voice = v[0];
-          speechSynthesis.speak(u);
+    function toggleChat() {
+      const visible = chatBox.style.display === "flex";
+      if (visible) {
+        minimizeChat();
+      } else {
+        showChat();
+        if (chatMessages.childElementCount === 0) {
+          const greeting = `สวัสดีค่ะชุมชน ${communityName} พลอยใสยินดีให้บริการค่ะ 🌸`;
+          reply(greeting);
+          setTimeout(() => {
+            reply("วันนี้อยากสร้างคอนเทนต์แบบไหนคะ (กิจกรรม, สถานที่ท่องเที่ยว, ร้านอาหาร, ร้านค้า, โรงแรม)?");
+          }, 1200);
         }
       }
+    }
 
-      function addBubble(text, sender) {
-        const div = document.createElement("div");
-        div.className = "bubble " + sender;
-        div.textContent = text;
-        chatMessages.appendChild(div);
-        scrollChatToBottom();
-      }
-      function reply(text) {
-        addBubble(text, "ai");
-        speakThai(text);
-      }
+    function sendMsg(text) {
+      const message = text || userInput.value.trim();
+      if (!message) return;
+      addBubble(message, "user");
+      userInput.value = "";
 
-      function toggleChat() {
-        const visible = chatBox.style.display === "flex";
-        if (visible) {
-          minimizeChat();
-        } else {
-          showChat();
-          if (chatMessages.childElementCount === 0) {
-            const greeting = `สวัสดีค่ะชุมชน ${communityName} พลอยใสยินดีให้บริการค่ะ 🌸`;
-            reply(greeting);
-            setTimeout(() => {
-              reply(
-                "วันนี้อยากสร้างคอนเทนต์แบบไหนคะ (กิจกรรม, สถานที่ท่องเที่ยว, ร้านอาหาร, โรงแรม)?"
-              );
-            }, 1200);
-          }
-        }
+      if (editingIndex !== null) {
+        currentData[editingIndex] = message;
+        editingIndex = null;
+        showPreview();
+        return;
       }
 
-      function sendMsg(text) {
-        const message = text || userInput.value.trim();
-        if (!message) return;
-        addBubble(message, "user");
-        userInput.value = "";
-
-        if (editingIndex !== null) {
-          currentData[editingIndex] = message;
-          editingIndex = null;
-          showPreview();
+      if (step === 0) {
+        const detected = detectCategory(message);
+        if (!detected) {
+          reply("กรุณาระบุประเภท: กิจกรรม / สถานที่ท่องเที่ยว / ร้านอาหาร / ร้านค้า / โรงแรม (เช่น 'เพิ่มกิจกรรม', 'ท่องเที่ยว', 'คาเฟ่', 'ตลาด', 'ที่พัก')");
           return;
         }
+        selectedType = detected;
+        step = 1; currentData = {}; askNext();
+      } else {
+        const questions = templates[selectedType];
+        currentData[step - 1] = message;
+        step++;
+        if (step <= questions.length) { askNext(); } else { showPreview(); step = 0; }
+      }
+    }
 
-        if (step === 0) {
-          const detected = detectCategory(message);
-          if (!detected) {
-            reply(
-              "กรุณาระบุประเภท: กิจกรรม / สถานที่ท่องเที่ยว / ร้านอาหาร / โรงแรม (เช่น 'เพิ่มกิจกรรม', 'ท่องเที่ยว', 'ร้านกิน', 'ที่พัก')"
-            );
-            return;
-          }
-          selectedType = detected;
-          step = 1;
-          currentData = {};
-          askNext();
-        } else {
-          const questions = templates[selectedType];
-          currentData[step - 1] = message;
-          step++;
-          if (step <= questions.length) {
-            askNext();
-          } else {
-            showPreview();
-            step = 0;
-          }
+    function askNext(){ const q = templates[selectedType][step - 1]; reply(q); }
+
+    function showPreview(){
+      const labels = templates[selectedType];
+      let html = '<div class="activity-box">';
+      labels.forEach((label, i) => {
+        html += `<p><b>${label}</b> ${currentData[i] || ""} <button class="btn secondary" style="padding:4px 8px" onclick="editField(${i})">✏️</button></p>`;
+      });
+      html += `<div class="row"><button class="btn" onclick="confirmActivity()">✅ ยืนยัน</button></div></div>`;
+      activityPreview.innerHTML = html;
+
+      // แจ้ง + ย่อแชททุกหน้าจอ
+      reply("นี่คือสรุปข้อมูลใหม่ของคุณค่ะ ตรวจสอบด้านซ้าย แล้วกดแก้ไขหรือยืนยันได้เลย");
+      setTimeout(minimizeChat, 400);
+    }
+
+    function editField(index){
+      editingIndex = index;
+      const q = templates[selectedType][index];
+      showChat();
+      reply("ตกลงค่ะ เราจะแก้ไขข้อนี้ใหม่นะคะ");
+      setTimeout(() => { reply(q); scrollChatToBottom(); }, 300);
+    }
+
+    function confirmActivity(){
+      const labels = templates[selectedType];
+      let html = '<div class="activity-box">';
+      labels.forEach((label, i) => { html += `<p><b>${label}</b> ${currentData[i] || ""}</p>`; });
+      html += `<div class="row"><button class="btn" onclick="generateContent()">✨ สร้างโพสต์ด้วย AI</button></div></div>`;
+      const div = document.createElement("div");
+      div.className = "activity-box";
+      div.innerHTML = html;
+      activityList.prepend(div);
+      activityPreview.innerHTML = "";
+      reply("ข้อมูลถูกบันทึกเรียบร้อยแล้วค่ะ 🎉");
+
+      /* ---- Google Sheet: รอบที่ 1 (ตอนยืนยัน) ---- */
+      sendToSheet({
+        communityName,
+        type: selectedType,
+        answers: currentData,
+        aiContent: ''
+      });
+    }
+
+    async function generateContent(){
+      const labels = templates[selectedType];
+      let prompt = `ช่วยเขียนโพสต์แนะนำหมวด "${selectedType}" โดยใช้ข้อมูลต่อไปนี้:\n`;
+      labels.forEach((label, i) => prompt += `- ${label}: ${currentData[i] || "-"}\n`);
+
+      reply("กำลังสร้างโพสต์จาก AI กรุณารอสักครู่...");
+      const backendUrl = getBackendUrl();
+      try{
+        const data = await fetchJSON(backendUrl, {
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ prompt })
+        });
+        const content = data?.content;
+        if(content){
+          aiContentEl.textContent = content;
+          aiBox.style.display = "block";
+          reply("พลอยใสช่วยสร้างโพสต์ให้เรียบร้อยแล้วค่ะ ลองตรวจสอบดูนะคะ 😊");
+          setTimeout(minimizeChat, 200);
+
+          /* ---- Google Sheet: รอบที่ 2 (มีเนื้อหา AI) ---- */
+          sendToSheet({
+            communityName,
+            type: selectedType,
+            answers: currentData,
+            aiContent: content
+          });
+        }else{
+          reply("ขออภัย ไม่สามารถสร้างโพสต์ได้ในขณะนี้");
         }
+      }catch(err){
+        console.error(err);
+        reply("เกิดข้อผิดพลาดในการเชื่อมต่อ AI ("+ err.message +")");
       }
+    }
 
-      function askNext() {
-        const q = templates[selectedType][step - 1];
-        reply(q);
+    /* ---------- ย่อโพสต์ให้สั้น กระชับ ---------- */
+    async function shortenContent(){
+      const current = aiContentEl.textContent.trim();
+      if (!current) {
+        alert("ยังไม่มีโพสต์ให้ย่อค่ะ ลองกดสร้างโพสต์ด้วย AI ก่อนนะคะ");
+        return;
       }
+      const prevText = shortenBtn.textContent;
+      shortenBtn.disabled = true;
+      shortenBtn.textContent = "กำลังย่อ...";
 
-      function showPreview() {
-        const labels = templates[selectedType];
-        let html = '<div class="activity-box">';
-        labels.forEach((label, i) => {
-          html += `<p><b>${label}</b> ${
-            currentData[i] || ""
-          } <button class="btn secondary" style="padding:4px 8px" onclick="editField(${i})">✏️</button></p>`;
+      reply("เดี๋ยวพลอยใสช่วยย่อให้กระชับนะคะ ✂️");
+
+      const backendUrl = getBackendUrl();
+      const shortenPrompt =
+        "ช่วยย่อข้อความภาษาไทยด้านล่างให้ 'สั้น กระชับ อ่านง่าย สไตล์วัยรุ่น' " +
+        "เน้นใจความสำคัญ, ตัดคำซ้ำซ้อน, ใช้ประโยคสั้น, ไม่เวิ่นเว้อ, " +
+        "เลี่ยงอีโมจิ/แฮชแท็กเยอะเกินไป (อนุญาตต้นประโยค 1 อีโมจิได้), " +
+        "ยาวประมาณ 120–280 อักขระ:\n\n" + current;
+
+      try{
+        const data = await fetchJSON(backendUrl, {
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ prompt: shortenPrompt })
         });
-        html += `<div class="row"><button class="btn" onclick="confirmActivity()">✅ ยืนยัน</button></div></div>`;
-        activityPreview.innerHTML = html;
+        const concise = data?.content?.trim();
+        if (!concise) throw new Error("ไม่มีเนื้อหาตอบกลับ");
 
-        // แจ้ง + ย่อแชททุกหน้าจอ
-        reply(
-          "นี่คือสรุปข้อมูลใหม่ของคุณค่ะ ตรวจสอบด้านซ้าย แล้วกดแก้ไขหรือยืนยันได้เลย"
-        );
-        setTimeout(minimizeChat, 400);
-      }
+        aiContentEl.textContent = concise;
+        reply("เรียบร้อยค่ะ — ปรับให้กระชับแล้ว ลองอ่านดูได้เลย 🤏");
+        setTimeout(minimizeChat, 200);
 
-      function editField(index) {
-        editingIndex = index;
-        const q = templates[selectedType][index];
-        showChat();
-        reply("ตกลงค่ะ เราจะแก้ไขข้อนี้ใหม่นะคะ");
-        setTimeout(() => {
-          reply(q);
-          scrollChatToBottom();
-        }, 300);
-      }
-
-      function confirmActivity() {
-        const labels = templates[selectedType];
-        let html = '<div class="activity-box">';
-        labels.forEach((label, i) => {
-          html += `<p><b>${label}</b> ${currentData[i] || ""}</p>`;
-        });
-        html += `<div class="row"><button class="btn" onclick="generateContent()">✨ สร้างโพสต์ด้วย AI</button></div></div>`;
-        const div = document.createElement("div");
-        div.className = "activity-box";
-        div.innerHTML = html;
-        activityList.prepend(div);
-        activityPreview.innerHTML = "";
-        reply("ข้อมูลถูกบันทึกเรียบร้อยแล้วค่ะ 🎉");
-
-        /* ---- ส่งไป Google Sheet: รอบที่ 1 (ตอนยืนยัน) ---- */
+        /* ---- Google Sheet: รอบที่ 3 (เวอร์ชันย่อ) ---- */
         sendToSheet({
           communityName,
           type: selectedType,
           answers: currentData,
-          aiContent: "",
+          aiContent: concise
         });
+      }catch(err){
+        console.error(err);
+        reply("ขออภัย ย่อไม่สำเร็จตอนนี้ ("+ err.message +")");
+      }finally{
+        shortenBtn.disabled = false;
+        shortenBtn.textContent = prevText;
       }
+    }
 
-      async function generateContent() {
-        const labels = templates[selectedType];
-        let prompt = `ช่วยเขียนโพสต์แนะนำหมวด "${selectedType}" โดยใช้ข้อมูลต่อไปนี้:\n`;
-        labels.forEach(
-          (label, i) => (prompt += `- ${label}: ${currentData[i] || "-"}\n`)
-        );
+    function startVoice(){
+      if (!("webkitSpeechRecognition" in window)) { alert("เบราว์เซอร์นี้ไม่รองรับ Speech Recognition"); return; }
+      const recognition = new webkitSpeechRecognition();
+      recognition.lang = "th-TH"; recognition.interimResults = false; recognition.maxAlternatives = 1; recognition.start();
+      recognition.onresult = (e) => { const transcript = e.results[0][0].transcript; sendMsg(transcript); };
+      recognition.onerror = (e) => console.error("Voice error:", e.error);
+    }
 
-        reply("กำลังสร้างโพสต์จาก AI กรุณารอสักครู่...");
-        try {
-          const backendUrl =
-            location.hostname === "localhost"
-              ? "http://localhost:3001/generate"
-              : "/api/generate";
-          const res = await fetch(backendUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prompt }),
-          });
-          const data = await res.json();
-          const content = data.content;
-          if (content) {
-            document.getElementById("aiGeneratedContent").textContent = content;
-            document.getElementById("aiContentBox").style.display = "block";
-            reply(
-              "พลอยใสช่วยสร้างโพสต์ให้เรียบร้อยแล้วค่ะ ลองตรวจสอบดูนะคะ 😊"
-            );
-            setTimeout(minimizeChat, 200);
+    userInput.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") { event.preventDefault(); sendMsg(); }
+    });
 
-            /* ---- ส่งไป Google Sheet: รอบที่ 2 (มีเนื้อหา AI) ---- */
-            sendToSheet({
-              communityName,
-              type: selectedType,
-              answers: currentData,
-              aiContent: content,
-            });
-          } else {
-            reply("ขออภัย ไม่สามารถสร้างโพสต์ได้ในขณะนี้");
-          }
-        } catch (err) {
-          console.error(err);
-          reply("เกิดข้อผิดพลาดในการเชื่อมต่อ AI");
-        }
-      }
+    function copyPostText(){
+      const content = aiContentEl.innerText;
+      navigator.clipboard.writeText(content)
+        .then(() => alert("📋 คัดลอกข้อความเรียบร้อยแล้ว กรุณานำไปวางในโพสต์ Facebook"))
+        .catch(() => alert("เกิดข้อผิดพลาดในการคัดลอก"));
+    }
 
-      function startVoice() {
-        if (!("webkitSpeechRecognition" in window)) {
-          alert("เบราว์เซอร์นี้ไม่รองรับ Speech Recognition");
-          return;
-        }
-        const recognition = new webkitSpeechRecognition();
-        recognition.lang = "th-TH";
-        recognition.interimResults = false;
-        recognition.maxAlternatives = 1;
-        recognition.start();
-        recognition.onresult = (e) => {
-          const transcript = e.results[0][0].transcript;
-          sendMsg(transcript);
-        };
-        recognition.onerror = (e) => console.error("Voice error:", e.error);
-      }
-
-      userInput.addEventListener("keydown", function (event) {
-        if (event.key === "Enter") {
-          event.preventDefault();
-          sendMsg();
-        }
-      });
-
-      function copyPostText() {
-        const content = document.getElementById("aiGeneratedContent").innerText;
-        navigator.clipboard
-          .writeText(content)
-          .then(() =>
-            alert("📋 คัดลอกข้อความเรียบร้อยแล้ว กรุณานำไปวางในโพสต์ Facebook")
-          )
-          .catch(() => alert("เกิดข้อผิดพลาดในการคัดลอก"));
-      }
-
-      function openFacebookPost() {
-        const content = document.getElementById("aiGeneratedContent").innerText;
-        const fbUrl = `https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(
-          content
-        )}`;
-        window.open(fbUrl, "_blank");
-      }
-    </script>
-  </body>
+    function openFacebookPost(){
+      const content = aiContentEl.innerText;
+      const fbUrl = `https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(content)}`;
+      window.open(fbUrl, "_blank");
+    }
+  </script>
+</body>
 </html>
