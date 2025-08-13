@@ -90,19 +90,6 @@
     }
     .preview .activity-box{ outline: 2px dashed color-mix(in srgb, var(--ring) 40%, transparent); }
 
-    /* Audience select */
-    .audience{
-      display:block; border:1px dashed var(--border); border-radius: 10px;
-      padding: 10px; margin: 8px 0 0; background: color-mix(in srgb, var(--card) 92%, var(--bg));
-    }
-    .audience legend{ font-weight:700; font-size:14px; color: var(--text) }
-    .audience .opts{ display:flex; gap:10px; flex-wrap:wrap; margin-top:6px }
-    .audience label{
-      display:inline-flex; align-items:center; gap:6px; padding:8px 10px; border:1px solid var(--border);
-      border-radius:999px; cursor:pointer; background: var(--card);
-    }
-    .audience input{ accent-color: var(--primary); }
-
     /* ---------- AI content ---------- */
     #aiContentBox{ display:none }
     .ai-card{
@@ -132,6 +119,7 @@
       font-size: 16px; cursor: pointer; box-shadow: var(--shadow); z-index: 1000; border: none;
       transition: opacity .15s ease;
     }
+    /* มือถือ: ย้ายปุ่มไปล่างขวา และซ่อนเมื่อเปิดแชท */
     @media (max-width: 768px){
       .chat-button{
         right: 16px; left: auto; transform: none;
@@ -282,7 +270,7 @@
     /* ---------- Backend URL helpers ---------- */
     function getBackendUrl(){
       if (location.hostname === 'localhost' || location.protocol === 'file:') {
-        return 'http://localhost:3001/generate';
+        return 'http://localhost:3001/generate'; // เปลี่ยนเป็นพอร์ต/โดเมนแบ็กเอนด์จริงของคุณได้
       }
       return '/api/generate';
     }
@@ -358,7 +346,6 @@
     let selectedType = "activity";
     let currentData = {};
     let editingIndex = null;
-    let targetAudience = 'work'; // 'teen' | 'work' | 'senior' (ดีฟอลต์ วัยทำงาน)
 
     const templates = {
       activity: [
@@ -390,6 +377,7 @@
         "มีห้องพักแบบใดบ้าง? ราคาเริ่มต้นที่เท่าไหร่?",
         "ติดต่อจองที่พักได้ช่องทางใดบ้างคะ?",
       ],
+      /* ---- NEW: ร้านค้า ---- */
       shop: [
         "ชื่อร้านค้าของคุณคืออะไรคะ?",
         "ร้านตั้งอยู่ที่ไหนคะ? (ที่อยู่/จุดสังเกต/แผงที่ตลาด)",
@@ -484,46 +472,19 @@
 
     function askNext(){ const q = templates[selectedType][step - 1]; reply(q); }
 
-    /* แผนการแสดงผล Audience + ปุ่มยืนยัน */
-    function renderAudienceSelector(){
-      const checkedTeen   = targetAudience === 'teen'   ? 'checked' : '';
-      const checkedWork   = targetAudience === 'work'   ? 'checked' : '';
-      const checkedSenior = targetAudience === 'senior' ? 'checked' : '';
-
-      return `
-        <fieldset class="audience">
-          <legend>🎯 เลือกกลุ่มเป้าหมาย</legend>
-          <div class="opts">
-            <label><input type="radio" name="audience" value="teen" ${checkedTeen}> วัยรุ่น</label>
-            <label><input type="radio" name="audience" value="work" ${checkedWork}> วัยทำงาน</label>
-            <label><input type="radio" name="audience" value="senior" ${checkedSenior}> ผู้สูงอายุ</label>
-          </div>
-        </fieldset>
-      `;
-    }
-
     function showPreview(){
       const labels = templates[selectedType];
       let html = '<div class="activity-box">';
       labels.forEach((label, i) => {
         html += `<p><b>${label}</b> ${currentData[i] || ""} <button class="btn secondary" style="padding:4px 8px" onclick="editField(${i})">✏️</button></p>`;
       });
-      html += renderAudienceSelector();
-      html += `<div class="row" style="margin-top:10px"><button class="btn" onclick="confirmActivity()">✅ ยืนยัน</button></div></div>`;
+      html += `<div class="row"><button class="btn" onclick="confirmActivity()">✅ ยืนยัน</button></div></div>`;
       activityPreview.innerHTML = html;
 
       // แจ้ง + ย่อแชททุกหน้าจอ
       reply("นี่คือสรุปข้อมูลใหม่ของคุณค่ะ ตรวจสอบด้านซ้าย แล้วกดแก้ไขหรือยืนยันได้เลย");
       setTimeout(minimizeChat, 400);
     }
-
-    /* ฟัง change ของ radio audience (event delegation เพราะ element ถูก render แบบไดนามิก) */
-    document.addEventListener('change', (e) => {
-      const t = e.target;
-      if (t && t.name === 'audience') {
-        targetAudience = t.value; // 'teen' | 'work' | 'senior'
-      }
-    });
 
     function editField(index){
       editingIndex = index;
@@ -537,7 +498,6 @@
       const labels = templates[selectedType];
       let html = '<div class="activity-box">';
       labels.forEach((label, i) => { html += `<p><b>${label}</b> ${currentData[i] || ""}</p>`; });
-      html += `<p><b>กลุ่มเป้าหมาย</b> ${targetAudience === 'teen' ? 'วัยรุ่น' : targetAudience === 'senior' ? 'ผู้สูงอายุ' : 'วัยทำงาน'}</p>`;
       html += `<div class="row"><button class="btn" onclick="generateContent()">✨ สร้างโพสต์ด้วย AI</button></div></div>`;
       const div = document.createElement("div");
       div.className = "activity-box";
@@ -550,28 +510,15 @@
       sendToSheet({
         communityName,
         type: selectedType,
-        answers: { ...currentData, _audience: targetAudience },
+        answers: currentData,
         aiContent: ''
       });
-    }
-
-    function audienceGuideline(){
-      if (targetAudience === 'teen') {
-        return "โทนวัยรุ่น สนุก กระชับ ใช้คำง่าย อาจมีอีโมจิเล็กน้อย ไม่ทางการ เน้นชวนเพื่อน ชวนแชร์";
-      }
-      if (targetAudience === 'senior') {
-        return "โทนสุภาพ อ่านง่าย ประโยคสั้น ชัดเจน หลีกเลี่ยงศัพท์สแลง เน้นรายละเอียดเวลา/สถานที่/การติดต่อ";
-      }
-      return "โทนทางการเล็กน้อย กระชับ เข้าใจง่าย เน้นประโยชน์ เวลาสถานที่ และสิ่งที่ต้องเตรียม";
     }
 
     async function generateContent(){
       const labels = templates[selectedType];
       let prompt = `ช่วยเขียนโพสต์แนะนำหมวด "${selectedType}" โดยใช้ข้อมูลต่อไปนี้:\n`;
       labels.forEach((label, i) => prompt += `- ${label}: ${currentData[i] || "-"}\n`);
-      const audThai = targetAudience === 'teen' ? 'กลุ่มวัยรุ่น' : targetAudience === 'senior' ? 'กลุ่มผู้สูงอายุ' : 'กลุ่มวัยทำงาน';
-      prompt += `\nกลุ่มเป้าหมาย: ${audThai}\nโปรดปรับโทนภาษาให้เหมาะสมตามแนวทาง: ${audienceGuideline()}\n`;
-      prompt += `ฟอร์แมต: เขียนเป็นย่อหน้าอ่านง่าย 1-2 ย่อหน้า พร้อมคำชวนปฏิบัติท้ายโพสต์`;
 
       reply("กำลังสร้างโพสต์จาก AI กรุณารอสักครู่...");
       const backendUrl = getBackendUrl();
@@ -592,7 +539,7 @@
           sendToSheet({
             communityName,
             type: selectedType,
-            answers: { ...currentData, _audience: targetAudience },
+            answers: currentData,
             aiContent: content
           });
         }else{
@@ -619,7 +566,7 @@
 
       const backendUrl = getBackendUrl();
       const shortenPrompt =
-        "ช่วยย่อข้อความภาษาไทยด้านล่างให้ 'สั้น กระชับ อ่านง่าย สไตล์วัยรุ่น/ทั่วไป' " +
+        "ช่วยย่อข้อความภาษาไทยด้านล่างให้ 'สั้น กระชับ อ่านง่าย สไตล์วัยรุ่น' " +
         "เน้นใจความสำคัญ, ตัดคำซ้ำซ้อน, ใช้ประโยคสั้น, ไม่เวิ่นเว้อ, " +
         "เลี่ยงอีโมจิ/แฮชแท็กเยอะเกินไป (อนุญาตต้นประโยค 1 อีโมจิได้), " +
         "ยาวประมาณ 120–280 อักขระ:\n\n" + current;
@@ -641,7 +588,7 @@
         sendToSheet({
           communityName,
           type: selectedType,
-          answers: { ...currentData, _audience: targetAudience },
+          answers: currentData,
           aiContent: concise
         });
       }catch(err){
