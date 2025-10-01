@@ -1,465 +1,712 @@
 <!DOCTYPE html>
 <html lang="th">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>โปรไฟล์ชุมชน</title>
-  <style>
-    /* ---------- Theme Tokens ---------- */
-    :root{
-      --bg: #f6f7fb;
-      --card: #ffffff;
-      --text: #0f172a;
-      --muted: #64748b;
-      --border: #e2e8f0;
-      --primary: #16a34a;
-      --primary-600:#15803d;
-      --accent: #06b6d4;
-      --ai: #fce4ec;
-      --ai-text:#ad1457;
-      --user:#c8e6c9;
-      --user-text:#1b5e20;
-      --shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
-      --ring: #22c55e;
-    }
-    :root.theme-dark{
-      --bg: #0b1220;
-      --card: #0f172a;
-      --text: #e5e7eb;
-      --muted: #9ca3af;
-      --border:#243041;
-      --primary:#22c55e;
-      --primary-600:#16a34a;
-      --accent:#22d3ee;
-      --ai:#2b1d24;
-      --ai-text:#f8b4c8;
-      --user:#19321b;
-      --user-text:#b7f7bf;
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --ring:#22c55e;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>โปรไฟล์ชุมชน</title>
+    <style>
+      /* ---------- Theme Tokens ---------- */
+      :root {
+        --bg: #f6f7fb;
+        --card: #ffffff;
+        --text: #0f172a;
+        --muted: #64748b;
+        --border: #e2e8f0;
+        --primary: #16a34a;
+        --primary-600: #15803d;
+        --accent: #06b6d4;
+        --ai: #fce4ec;
+        --ai-text: #ad1457;
+        --user: #c8e6c9;
+        --user-text: #1b5e20;
+        --shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+        --ring: #22c55e;
+      }
+      :root.theme-dark {
+        --bg: #0b1220;
+        --card: #0f172a;
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+        --border: #243041;
+        --primary: #22c55e;
+        --primary-600: #16a34a;
+        --accent: #22d3ee;
+        --ai: #2b1d24;
+        --ai-text: #f8b4c8;
+        --user: #19321b;
+        --user-text: #b7f7bf;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        --ring: #22c55e;
+      }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; font-family: system-ui, "Noto Sans Thai", sans-serif;
-      color:var(--text); background:
-        radial-gradient(1000px 600px at 10% 0%, rgba(34,197,94,.08), transparent),
-        radial-gradient(1000px 600px at 90% 100%, rgba(6,182,212,.08), transparent),
-        var(--bg);
-      padding: 20px;
-      transition: background .25s ease, color .2s ease;
-    }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: system-ui, "Noto Sans Thai", sans-serif;
+        color: var(--text);
+        background: radial-gradient(
+            1000px 600px at 10% 0%,
+            rgba(34, 197, 94, 0.08),
+            transparent
+          ),
+          radial-gradient(
+            1000px 600px at 90% 100%,
+            rgba(6, 182, 212, 0.08),
+            transparent
+          ),
+          var(--bg);
+        padding: 20px;
+        transition: background 0.25s ease, color 0.2s ease;
+      }
 
-    /* ---------- Layout ---------- */
-    .container{
-      max-width: 1200px; margin: 0 auto;
-      display: grid; gap: 24px;
-      grid-template-columns: 1fr 320px;
-    }
-    @media (max-width: 960px){ .container{ grid-template-columns: 1fr; } }
+      /* ---------- Layout ---------- */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        gap: 24px;
+        grid-template-columns: 1fr 320px;
+      }
+      @media (max-width: 960px) {
+        .container {
+          grid-template-columns: 1fr;
+        }
+      }
 
-    .card{
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-      padding: 20px;
-      margin-bottom:20px;
-    }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        padding: 20px;
+        margin-bottom: 20px;
+      }
 
-    /* ---------- Header ---------- */
-    .page-header{
-      display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom: 16px;
-    }
-    .title{ display:flex; align-items:center; gap:12px; }
-    .logo{
-      width:42px; height:42px; border-radius:12px; display:grid; place-items:center;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      color:#fff; font-weight:700;
-    }
-    h1{margin:0; font-size: clamp(20px, 2.5vw, 28px);}
-    .meta{color:var(--muted); font-size: 14px; margin-top:4px}
+      /* ---------- Header ---------- */
+      .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      .title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        color: #fff;
+        font-weight: 700;
+      }
+      h1 {
+        margin: 0;
+        font-size: clamp(20px, 2.5vw, 28px);
+      }
+      .meta {
+        color: var(--muted);
+        font-size: 14px;
+        margin-top: 4px;
+      }
 
-    /* ---------- Sidebar ---------- */
-    .sidebar h2{margin: 0 0 10px}
-    .activity-box{
-      border:1px solid var(--border);
-      background: color-mix(in srgb, var(--card) 90%, var(--bg));
-      border-radius: 12px;
-      padding: 12px; margin-bottom:12px;
-    }
-    .preview .activity-box{ outline: 2px dashed color-mix(in srgb, var(--ring) 40%, transparent); }
+      /* ---------- Sidebar ---------- */
+      .sidebar h2 {
+        margin: 0 0 10px;
+      }
+      .activity-box {
+        border: 1px solid var(--border);
+        background: color-mix(in srgb, var(--card) 90%, var(--bg));
+        border-radius: 12px;
+        padding: 12px;
+        margin-bottom: 12px;
+      }
+      .preview .activity-box {
+        outline: 2px dashed color-mix(in srgb, var(--ring) 40%, transparent);
+      }
 
-    /* Audience select */
-    .audience{
-      display:block; border:1px dashed var(--border); border-radius: 10px;
-      padding: 10px; margin: 8px 0 0; background: color-mix(in srgb, var(--card) 92%, var(--bg));
-    }
-    .audience legend{ font-weight:700; font-size:14px; color: var(--text) }
+      /* Audience select */
+      .audience {
+        display: block;
+        border: 1px dashed var(--border);
+        border-radius: 10px;
+        padding: 10px;
+        margin: 8px 0 0;
+        background: color-mix(in srgb, var(--card) 92%, var(--bg));
+      }
+      .audience legend {
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--text);
+      }
 
-    /* ---------- AI content ---------- */
-    #aiContentBox{ display:none }
-    .ai-card{
-      background: color-mix(in srgb, var(--card) 85%, var(--ai) );
-      border:1px solid var(--border);
-      border-radius: 12px; padding:16px;
-    }
-    .ai-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
-    .btn{
-      appearance:none; border:none; cursor:pointer;
-      padding:10px 14px; border-radius:10px; font-weight:600;
-      background: var(--primary); color:#fff;
-      transition: transform .03s, background .15s, opacity .15s, box-shadow .15s;
-      box-shadow: 0 4px 14px rgba(34,197,94,.25);
-    }
-    .btn:hover{ background: var(--primary-600) }
-    .btn.secondary{ background: #6b7280; box-shadow: none; }
-    .btn.fb{ background:#4267b2; }
+      /* ---------- AI content ---------- */
+      #aiContentBox {
+        display: none;
+      }
+      .ai-card {
+        background: color-mix(in srgb, var(--card) 85%, var(--ai));
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px;
+      }
+      .ai-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+      .btn {
+        appearance: none;
+        border: none;
+        cursor: pointer;
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-weight: 600;
+        background: var(--primary);
+        color: #fff;
+        transition: transform 0.03s, background 0.15s, opacity 0.15s,
+          box-shadow 0.15s;
+        box-shadow: 0 4px 14px rgba(34, 197, 94, 0.25);
+      }
+      .btn:hover {
+        background: var(--primary-600);
+      }
+      .btn.secondary {
+        background: #6b7280;
+        box-shadow: none;
+      }
+      .btn.fb {
+        background: #4267b2;
+      }
 
-    /* ---------- Chat trigger button ---------- */
-    .chat-button{ position: fixed; right:16px; bottom:16px;
-      background: var(--primary); color:#fff; padding:14px 20px;
-      border-radius:999px; font-size:16px; cursor:pointer;
-      box-shadow:var(--shadow); border:none; }
-    #chatBox{ position: fixed; right:16px; bottom:80px;
-      width:min(380px,94vw); height:520px; display:none;
-      flex-direction:column; background:var(--card); border:1px solid var(--border);
-      border-radius:14px; box-shadow:var(--shadow); z-index:999; overflow:hidden; }
-    #chatMessages{ flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:6px; }
-    .bubble{ max-width:85%; padding:8px 12px; border-radius:12px; margin:2px 0;
-      word-wrap: break-word; line-height:1.35; border:1px solid var(--border);}
-    .ai{ align-self:flex-start; background: var(--ai); color: var(--ai-text);}
-    .user{ align-self:flex-end; background: var(--user); color: var(--user-text);}
-    #chatInput{ display:flex; gap:8px; padding:8px; border-top:1px solid var(--border);}
-    #chatInput input{ flex:1; padding:12px; border:none; outline:none;}
-    #chatInput .send-btn{ background:var(--primary);}
-    #chatInput .voice-btn{ background:#f59e0b;}
-  </style>
-</head>
-<body>
-  <div class="container">
-    <!-- Main -->
-    <section>
-      <header class="page-header card">
-        <div class="title">
-          <div class="logo" aria-hidden="true">ช</div>
-          <div>
-            <h1 id="communityTitle">โปรไฟล์ชุมชน</h1>
-            <div class="meta">ข้อมูลภาพรวมและเครื่องมือช่วยสร้างคอนเทนต์</div>
+      /* ---------- Chat trigger button ---------- */
+      .chat-button {
+        position: fixed;
+        right: 16px;
+        bottom: 16px;
+        background: var(--primary);
+        color: #fff;
+        padding: 14px 20px;
+        border-radius: 999px;
+        font-size: 16px;
+        cursor: pointer;
+        box-shadow: var(--shadow);
+        border: none;
+      }
+      #chatBox {
+        position: fixed;
+        right: 16px;
+        bottom: 80px;
+        width: min(380px, 94vw);
+        height: 520px;
+        display: none;
+        flex-direction: column;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+        z-index: 999;
+        overflow: hidden;
+      }
+      #chatMessages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .bubble {
+        max-width: 85%;
+        padding: 8px 12px;
+        border-radius: 12px;
+        margin: 2px 0;
+        word-wrap: break-word;
+        line-height: 1.35;
+        border: 1px solid var(--border);
+      }
+      .ai {
+        align-self: flex-start;
+        background: var(--ai);
+        color: var(--ai-text);
+      }
+      .user {
+        align-self: flex-end;
+        background: var(--user);
+        color: var(--user-text);
+      }
+      #chatInput {
+        display: flex;
+        gap: 8px;
+        padding: 8px;
+        border-top: 1px solid var(--border);
+      }
+      #chatInput input {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        outline: none;
+      }
+      #chatInput .send-btn {
+        background: var(--primary);
+      }
+      #chatInput .voice-btn {
+        background: #f59e0b;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Main -->
+      <section>
+        <header class="page-header card">
+          <div class="title">
+            <div class="logo" aria-hidden="true">ช</div>
+            <div>
+              <h1 id="communityTitle">โปรไฟล์ชุมชน</h1>
+              <div class="meta">ข้อมูลภาพรวมและเครื่องมือช่วยสร้างคอนเทนต์</div>
+            </div>
+          </div>
+          <button id="themeToggle" class="btn secondary">สลับธีม</button>
+        </header>
+
+        <!-- 🔥 Trend Content -->
+        <div class="card">
+          <h2>🔥 Trend Content ตอนนี้</h2>
+          <ul id="trendBox">
+            <li>รีวิวอาหารสั้น + รูปจริง กำลังเป็นกระแส</li>
+            <li>วิดีโอสั้น Reels/TikTok engagement สูง</li>
+          </ul>
+        </div>
+
+        <!-- ✍️ Quick Post -->
+        <div class="card">
+          <h2>✍️ สร้างโพสต์ด่วน</h2>
+          <textarea
+            id="quickPostInput"
+            placeholder="เช่น อยากโปรโมทเมนูใหม่..."
+          ></textarea>
+          <button class="btn" onclick="generateQuickPost()">
+            ✨ ให้ AI ช่วย
+          </button>
+          <div
+            id="quickPostResult"
+            class="muted"
+            style="margin-top: 10px"
+          ></div>
+        </div>
+
+        <!-- 🖼 Image Tool -->
+        <div class="card">
+          <h2>🖼 เครื่องมือภาพ</h2>
+          <input type="file" id="imageUpload" accept="image/*" />
+          <p class="meta">💡 ในอนาคต: AI ช่วยครอป/ปรับสี/เพิ่มข้อความ</p>
+        </div>
+
+        <!-- 📅 Calendar -->
+        <div class="card">
+          <h2>📅 ปฏิทินแนะนำการโพสต์</h2>
+          <ul>
+            <li>จันทร์: โปรโมทเมนูใหม่</li>
+            <li>พุธ: โพสต์เบื้องหลังร้าน</li>
+            <li>ศุกร์: โปรโมชั่นสุดสัปดาห์</li>
+          </ul>
+        </div>
+
+        <!-- 📚 Content Library -->
+        <div class="card">
+          <h2>📚 Content Library</h2>
+          <div id="libraryList">
+            <p class="muted">ยังไม่มีโพสต์ที่บันทึกไว้</p>
           </div>
         </div>
-        <button id="themeToggle" class="btn secondary">สลับธีม</button>
-      </header>
 
-      <!-- 🔥 Trend Content -->
-      <div class="card">
-        <h2>🔥 Trend Content ตอนนี้</h2>
-        <ul id="trendBox">
-          <li>รีวิวอาหารสั้น + รูปจริง กำลังเป็นกระแส</li>
-          <li>วิดีโอสั้น Reels/TikTok engagement สูง</li>
-        </ul>
-      </div>
-
-      <!-- ✍️ Quick Post -->
-      <div class="card">
-        <h2>✍️ สร้างโพสต์ด่วน</h2>
-        <textarea id="quickPostInput" placeholder="เช่น อยากโปรโมทเมนูใหม่..."></textarea>
-        <button class="btn" onclick="generateQuickPost()">✨ ให้ AI ช่วย</button>
-        <div id="quickPostResult" class="muted" style="margin-top:10px"></div>
-      </div>
-
-      <!-- 🖼 Image Tool -->
-      <div class="card">
-        <h2>🖼 เครื่องมือภาพ</h2>
-        <input type="file" id="imageUpload" accept="image/*" />
-        <p class="meta">💡 ในอนาคต: AI ช่วยครอป/ปรับสี/เพิ่มข้อความ</p>
-      </div>
-
-      <!-- 📅 Calendar -->
-      <div class="card">
-        <h2>📅 ปฏิทินแนะนำการโพสต์</h2>
-        <ul>
-          <li>จันทร์: โปรโมทเมนูใหม่</li>
-          <li>พุธ: โพสต์เบื้องหลังร้าน</li>
-          <li>ศุกร์: โปรโมชั่นสุดสัปดาห์</li>
-        </ul>
-      </div>
-
-      <!-- 📚 Content Library -->
-      <div class="card">
-        <h2>📚 Content Library</h2>
-        <div id="libraryList"><p class="muted">ยังไม่มีโพสต์ที่บันทึกไว้</p></div>
-      </div>
-
-      <!-- 📢 AI Generated Post (ของเดิม) -->
-      <div id="aiContentBox" class="ai-card card">
-        <h2>📢 โพสต์ที่สร้างจาก AI</h2>
-        <p id="aiGeneratedContent"></p>
-        <div class="ai-actions">
-          <button class="btn" id="shortenBtn" onclick="shortenContent()">✂️ ปรับให้กระชับ</button>
-          <button class="btn secondary" onclick="copyPostText()">📋 คัดลอกข้อความ</button>
-          <button class="btn fb" onclick="openFacebookPost()">📤 โพสต์บน Facebook</button>
+        <!-- 📢 AI Generated Post (ของเดิม) -->
+        <div id="aiContentBox" class="ai-card card">
+          <h2>📢 โพสต์ที่สร้างจาก AI</h2>
+          <p id="aiGeneratedContent"></p>
+          <div class="ai-actions">
+            <button class="btn" id="shortenBtn" onclick="shortenContent()">
+              ✂️ ปรับให้กระชับ
+            </button>
+            <button class="btn secondary" onclick="copyPostText()">
+              📋 คัดลอกข้อความ
+            </button>
+            <button class="btn fb" onclick="openFacebookPost()">
+              📤 โพสต์บน Facebook
+            </button>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="card">
-        <h2>โพสต์ล่าสุด</h2>
-        <div id="activityList"></div>
-      </div>
-      <div class="card preview">
-        <h2>โพสต์ใหม่ (Preview)</h2>
-        <div id="activityPreview"></div>
-      </div>
-    </aside>
-  </div>
-
-  <!-- Chat -->
-  <div id="chatBox" role="dialog" aria-label="กล่องแชทพลอยใส">
-    <div id="chatMessages"></div>
-    <div id="chatInput">
-      <input type="text" id="userMsg" placeholder="พิมพ์ข้อความหรือกด 🎤..." />
-      <button class="send-btn btn" onclick="sendMsg()">ส่ง</button>
-      <button class="voice-btn btn" onclick="startVoice()">🎤</button>
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="card">
+          <h2>โพสต์ล่าสุด</h2>
+          <div id="activityList"></div>
+        </div>
+        <div class="card preview">
+          <h2>โพสต์ใหม่ (Preview)</h2>
+          <div id="activityPreview"></div>
+        </div>
+      </aside>
     </div>
-  </div>
-  <button class="chat-button" onclick="toggleChat()">💬 คุยกับพลอยใส</button>
 
-  <!-- Script -->
-  <script>
-    /* โค้ดเดิมทั้งหมดกว่า 400 บรรทัดของคุณ (sendToSheet, fetchJSON, theme toggle, chat flow, detectCategory, showPreview, confirmActivity, generateContent, shortenContent, copyPostText, openFacebookPost, startVoice, etc.) วางไว้ครบตรงนี้ */
+    <!-- Chat -->
+    <div id="chatBox" role="dialog" aria-label="กล่องแชทพลอยใส">
+      <div id="chatMessages"></div>
+      <div id="chatInput">
+        <input
+          type="text"
+          id="userMsg"
+          placeholder="พิมพ์ข้อความหรือกด 🎤..."
+        />
+        <button class="send-btn btn" onclick="sendMsg()">ส่ง</button>
+        <button class="voice-btn btn" onclick="startVoice()">🎤</button>
+      </div>
+    </div>
+    <button class="chat-button" onclick="toggleChat()">💬 คุยกับพลอยใส</button>
 
-    /* ---------- Google Sheet Web App URL ---------- */
-    const SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyRiQ40M8zo9wDdniSXfMu73_sAgqjGA8XK-c3kian9oAp8mE7xp-z0ysCZtfdKfiSJ/exec";
+    <!-- Script -->
+    <script>
+      /* โค้ดเดิมทั้งหมดกว่า 400 บรรทัดของคุณ (sendToSheet, fetchJSON, theme toggle, chat flow, detectCategory, showPreview, confirmActivity, generateContent, shortenContent, copyPostText, openFacebookPost, startVoice, etc.) วางไว้ครบตรงนี้ */
 
-    async function sendToSheet(payload){
-      try{
-        await fetch(SHEET_WEBAPP_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // no-cors friendly
-          body: JSON.stringify(payload),
-          mode: 'no-cors'
-        });
-      }catch(err){
-        console.warn('Send to sheet fail:', err);
-      }
-    }
+      /* ---------- Google Sheet Web App URL ---------- */
+      const SHEET_WEBAPP_URL =
+        "https://script.google.com/macros/s/AKfycbyRiQ40M8zo9wDdniSXfMu73_sAgqjGA8XK-c3kian9oAp8mE7xp-z0ysCZtfdKfiSJ/exec";
 
-    /* ---------- Backend URL helpers ---------- */
-    function getBackendUrl(){
-      if (location.hostname === 'localhost' || location.protocol === 'file:') {
-        return 'http://localhost:3001/generate';
-      }
-      return '/api/generate';
-    }
-    async function fetchJSON(url, options={}){
-      const res = await fetch(url, options);
-      if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
-      const ct = res.headers.get('content-type') || '';
-      if (ct.includes('application/json')) return res.json();
-      const t = await res.text();
-      try { return JSON.parse(t); } catch { throw new Error('ไม่พบ JSON จากเซิร์ฟเวอร์'); }
-    }
-
-    /* ---------- Init Community Title ---------- */
-    const communityName = localStorage.getItem("communityName") || "ชุมชนของคุณ";
-    document.getElementById("communityTitle").textContent = "🏡 " + communityName;
-
-    /* ---------- Elements ---------- */
-    const chatBox = document.getElementById("chatBox");
-    const chatMessages = document.getElementById("chatMessages");
-    const userInput = document.getElementById("userMsg");
-    const activityPreview = document.getElementById("activityPreview");
-    const activityList = document.getElementById("activityList");
-    const aiContentEl = document.getElementById("aiGeneratedContent");
-    const aiBox = document.getElementById("aiContentBox");
-    const shortenBtn = document.getElementById("shortenBtn");
-
-    /* ---------- Theme Toggle ---------- */
-    const root = document.documentElement;
-    const tBtn = document.getElementById("themeToggle");
-    const tIcon = document.getElementById("themeIcon");
-    const tText = document.getElementById("themeText");
-
-    function themeIcon(mode){
-      const sun = '<svg viewBox="0 0 24 24" fill="none"><path d="M12 4V2m0 20v-2M4 12H2m20 0h-2M5 5 3.6 3.6M20.4 20.4 19 19m0-14 1.4-1.4M5 19 3.6 20.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/></svg>';
-      const moon = '<svg viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-      tIcon.innerHTML = mode === 'dark' ? moon : sun;
-      tText.textContent = mode === 'dark' ? 'โหมดมืด' : 'โหมดสว่าง';
-      tBtn.setAttribute('aria-pressed', mode === 'dark');
-    }
-    function applyTheme(mode){
-      root.classList.toggle('theme-dark', mode === 'dark');
-      themeIcon(mode);
-      try{ localStorage.setItem('theme', mode); }catch(e){}
-    }
-    function detectTheme(){
-      const saved = localStorage.getItem('theme');
-      if(saved) return saved;
-      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light';
-    }
-    (function(){ applyTheme(detectTheme()); })();
-    tBtn.addEventListener('click', () => applyTheme(root.classList.contains('theme-dark') ? 'light' : 'dark'));
-
-    /* ---------- Chat helpers ---------- */
-    function scrollChatToBottom(){
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          chatMessages.scrollTop = chatMessages.scrollHeight;
-        });
-      });
-    }
-    function showChat(){
-      chatBox.style.display = 'flex';
-      document.body.classList.add('chat-open');
-      setTimeout(() => { userInput?.focus(); scrollChatToBottom(); }, 50);
-    }
-    function minimizeChat(){
-      chatBox.style.display = 'none';
-      document.body.classList.remove('chat-open');
-    }
-
-    /* ---------- Chat & Flow ---------- */
-    let step = 0;
-    let selectedType = "activity";
-    let currentData = {};
-    let editingIndex = null;
-    let targetAudience = 'work'; // 'teen' | 'work' | 'senior' (ดีฟอลต์ วัยทำงาน)
-
-    const templates = {
-      activity: [
-        "ชื่อกิจกรรมคืออะไรคะ?",
-        "รายละเอียดกิจกรรมเป็นอย่างไรบ้างคะ?",
-        "กิจกรรมจัดวันไหนคะ?",
-        "จัดที่ไหน? (ระบุสถานที่จัด)",
-        "ต้องลงทะเบียนไหม? มีค่าใช้จ่ายหรือเปล่าคะ?",
-      ],
-      place: [
-        "สถานที่ท่องเที่ยวชื่อว่าอะไรคะ?",
-        "อยู่ที่ตำบล/อำเภอไหนคะ?",
-        "มีอะไรน่าสนใจบ้าง?",
-        "เดินทางไปยังไงได้บ้าง?",
-        "เปิด-ปิดวันไหน? เวลาใด?",
-        "มีค่าเข้าชมหรือไม่คะ?",
-      ],
-      restaurant: [
-        "ชื่อร้านอาหารคืออะไรคะ?",
-        "ร้านนี้อยู่ที่ไหน?",
-        "จุดเด่นของร้านคืออะไรบ้าง?",
-        "เปิด-ปิดวันไหน? เวลาใด?",
-        "มีช่องทางติดต่อหรือโซเชียลมีเดียไหมคะ?",
-      ],
-      hotel: [
-        "โรงแรม/ที่พักชื่อว่าอะไรคะ?",
-        "ตั้งอยู่ที่ไหนคะ?",
-        "จุดเด่นหรือบรรยากาศเป็นแบบไหนคะ?",
-        "มีห้องพักแบบใดบ้าง? ราคาเริ่มต้นที่เท่าไหร่?",
-        "ติดต่อจองที่พักได้ช่องทางใดบ้างคะ?",
-      ],
-      shop: [
-        "ชื่อร้านค้าของคุณคืออะไรคะ?",
-        "ร้านตั้งอยู่ที่ไหนคะ? (ที่อยู่/จุดสังเกต/แผงที่ตลาด)",
-        "ร้านขายอะไรเป็นหลักคะ? (เช่น ผลไม้ เสื้อผ้า ของฝาก ของใช้ ฯลฯ)",
-        "เวลาเปิด-ปิดร้านคือกี่โมงคะ?",
-        "มีจุดเด่น/โปรโมชั่นอะไรที่อยากบอกลูกค้าบ้างคะ?",
-        "มีช่องทางติดต่อหรือโซเชียลมีเดียของร้านไหมคะ?",
-      ],
-    };
-
-    /* จับหมวดจากคีย์เวิร์ด (ยืดหยุ่น) */
-    function detectCategory(message){
-      const msg = (message || "").toLowerCase().trim();
-      const kwActivity = ['กิจกรรม','เพิ่มกิจกรรม','งาน','event','อีเวนท์','จัดงาน','เวิร์กช็อป','workshop'];
-      const kwPlace    = ['สถานที่','สถานที่ท่องเที่ยว','ท่องเที่ยว','เที่ยว','แหล่งท่องเที่ยว','แลนด์มาร์ก','place','แหล่งเที่ยว','tourist'];
-      const kwRestaurant=['ร้านอาหาร','ร้านกิน','กิน','ของกิน','อาหาร','คาเฟ่','ร้านกาแฟ','restaurant','เมนู','cafe','coffee'];
-      const kwHotel    = ['โรงแรม','ที่พัก','โฮสเทล','รีสอร์ท','เกสต์เฮ้าส์','hotel','hostel','จองที่พัก','ห้องพัก','resort'];
-      const kwShop     = ['ร้านค้า','ตลาด','ขายของ','ร้านขายผลไม้','แผงผลไม้','shop','market','store','ของฝาก','ของใช้','ค้าปลีก','ขายผลไม้','ซุปเปอร์','มินิมาร์ท'];
-      const hit = (arr) => arr.some(k => msg.includes(k));
-      if (hit(kwActivity))   return 'activity';
-      if (hit(kwPlace))      return 'place';
-      if (hit(kwRestaurant)) return 'restaurant';
-      if (hit(kwHotel))      return 'hotel';
-      if (hit(kwShop))       return 'shop';
-      return null;
-    }
-
-    function speakThai(text) {
-      const cleaned = text.replace(/[\p{Emoji_Presentation}\p{Emoji}\u200d]+/gu, "");
-      if ("speechSynthesis" in window) {
-        const u = new SpeechSynthesisUtterance(cleaned);
-        u.lang = "th-TH";
-        const v = speechSynthesis.getVoices().filter(x => x.lang.startsWith("th"));
-        if (v.length > 0) u.voice = v[0];
-        speechSynthesis.speak(u);
-      }
-    }
-
-    function addBubble(text, sender) {
-      const div = document.createElement("div");
-      div.className = "bubble " + sender;
-      div.textContent = text;
-      chatMessages.appendChild(div);
-      scrollChatToBottom();
-    }
-    function reply(text){ addBubble(text, "ai"); speakThai(text); }
-
-    function toggleChat() {
-      const visible = chatBox.style.display === "flex";
-      if (visible) {
-        minimizeChat();
-      } else {
-        showChat();
-        if (chatMessages.childElementCount === 0) {
-          const greeting = `สวัสดีค่ะชุมชน ${communityName} พลอยใสยินดีให้บริการค่ะ 🌸`;
-          reply(greeting);
-          setTimeout(() => {
-            reply("วันนี้อยากสร้างคอนเทนต์แบบไหนคะ (กิจกรรม, สถานที่ท่องเที่ยว, ร้านอาหาร, ร้านค้า, โรงแรม)?");
-          }, 1200);
+      async function sendToSheet(payload) {
+        try {
+          await fetch(SHEET_WEBAPP_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" }, // no-cors friendly
+            body: JSON.stringify(payload),
+            mode: "no-cors",
+          });
+        } catch (err) {
+          console.warn("Send to sheet fail:", err);
         }
       }
-    }
 
-    function sendMsg(text) {
-      const message = text || userInput.value.trim();
-      if (!message) return;
-      addBubble(message, "user");
-      userInput.value = "";
-
-      if (editingIndex !== null) {
-        currentData[editingIndex] = message;
-        editingIndex = null;
-        showPreview();
-        return;
+      /* ---------- Backend URL helpers ---------- */
+      function getBackendUrl() {
+        if (
+          location.hostname === "localhost" ||
+          location.protocol === "file:"
+        ) {
+          return "http://localhost:3001/generate";
+        }
+        return "/api/generate";
+      }
+      async function fetchJSON(url, options = {}) {
+        const res = await fetch(url, options);
+        if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+        const ct = res.headers.get("content-type") || "";
+        if (ct.includes("application/json")) return res.json();
+        const t = await res.text();
+        try {
+          return JSON.parse(t);
+        } catch {
+          throw new Error("ไม่พบ JSON จากเซิร์ฟเวอร์");
+        }
       }
 
-      if (step === 0) {
-        const detected = detectCategory(message);
-        if (!detected) {
-          reply("กรุณาระบุประเภท: กิจกรรม / สถานที่ท่องเที่ยว / ร้านอาหาร / ร้านค้า / โรงแรม (เช่น 'เพิ่มกิจกรรม', 'ท่องเที่ยว', 'คาเฟ่', 'ตลาด', 'ที่พัก')");
+      /* ---------- Init Community Title ---------- */
+      const communityName =
+        localStorage.getItem("communityName") || "ชุมชนของคุณ";
+      document.getElementById("communityTitle").textContent =
+        "🏡 " + communityName;
+
+      /* ---------- Elements ---------- */
+      const chatBox = document.getElementById("chatBox");
+      const chatMessages = document.getElementById("chatMessages");
+      const userInput = document.getElementById("userMsg");
+      const activityPreview = document.getElementById("activityPreview");
+      const activityList = document.getElementById("activityList");
+      const aiContentEl = document.getElementById("aiGeneratedContent");
+      const aiBox = document.getElementById("aiContentBox");
+      const shortenBtn = document.getElementById("shortenBtn");
+
+      /* ---------- Theme Toggle ---------- */
+      const root = document.documentElement;
+      const tBtn = document.getElementById("themeToggle");
+
+      function applyTheme(mode) {
+        root.classList.toggle("theme-dark", mode === "dark");
+        try {
+          localStorage.setItem("theme", mode);
+        } catch (e) {}
+      }
+
+      function detectTheme() {
+        const saved = localStorage.getItem("theme");
+        if (saved) return saved;
+        return window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+      }
+
+      // เริ่มต้นด้วยธีมที่บันทึกไว้
+      (function () {
+        applyTheme(detectTheme());
+      })();
+
+      // กดปุ่มสลับธีม
+      tBtn.addEventListener("click", () =>
+        applyTheme(root.classList.contains("theme-dark") ? "light" : "dark")
+      );
+
+      /* ---------- Chat helpers ---------- */
+      function scrollChatToBottom() {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+          });
+        });
+      }
+      function showChat() {
+        chatBox.style.display = "flex";
+        document.body.classList.add("chat-open");
+        setTimeout(() => {
+          userInput?.focus();
+          scrollChatToBottom();
+        }, 50);
+      }
+      function minimizeChat() {
+        chatBox.style.display = "none";
+        document.body.classList.remove("chat-open");
+      }
+
+      /* ---------- Chat & Flow ---------- */
+      let step = 0;
+      let selectedType = "activity";
+      let currentData = {};
+      let editingIndex = null;
+      let targetAudience = "work"; // 'teen' | 'work' | 'senior' (ดีฟอลต์ วัยทำงาน)
+
+      const templates = {
+        activity: [
+          "ชื่อกิจกรรมคืออะไรคะ?",
+          "รายละเอียดกิจกรรมเป็นอย่างไรบ้างคะ?",
+          "กิจกรรมจัดวันไหนคะ?",
+          "จัดที่ไหน? (ระบุสถานที่จัด)",
+          "ต้องลงทะเบียนไหม? มีค่าใช้จ่ายหรือเปล่าคะ?",
+        ],
+        place: [
+          "สถานที่ท่องเที่ยวชื่อว่าอะไรคะ?",
+          "อยู่ที่ตำบล/อำเภอไหนคะ?",
+          "มีอะไรน่าสนใจบ้าง?",
+          "เดินทางไปยังไงได้บ้าง?",
+          "เปิด-ปิดวันไหน? เวลาใด?",
+          "มีค่าเข้าชมหรือไม่คะ?",
+        ],
+        restaurant: [
+          "ชื่อร้านอาหารคืออะไรคะ?",
+          "ร้านนี้อยู่ที่ไหน?",
+          "จุดเด่นของร้านคืออะไรบ้าง?",
+          "เปิด-ปิดวันไหน? เวลาใด?",
+          "มีช่องทางติดต่อหรือโซเชียลมีเดียไหมคะ?",
+        ],
+        hotel: [
+          "โรงแรม/ที่พักชื่อว่าอะไรคะ?",
+          "ตั้งอยู่ที่ไหนคะ?",
+          "จุดเด่นหรือบรรยากาศเป็นแบบไหนคะ?",
+          "มีห้องพักแบบใดบ้าง? ราคาเริ่มต้นที่เท่าไหร่?",
+          "ติดต่อจองที่พักได้ช่องทางใดบ้างคะ?",
+        ],
+        shop: [
+          "ชื่อร้านค้าของคุณคืออะไรคะ?",
+          "ร้านตั้งอยู่ที่ไหนคะ? (ที่อยู่/จุดสังเกต/แผงที่ตลาด)",
+          "ร้านขายอะไรเป็นหลักคะ? (เช่น ผลไม้ เสื้อผ้า ของฝาก ของใช้ ฯลฯ)",
+          "เวลาเปิด-ปิดร้านคือกี่โมงคะ?",
+          "มีจุดเด่น/โปรโมชั่นอะไรที่อยากบอกลูกค้าบ้างคะ?",
+          "มีช่องทางติดต่อหรือโซเชียลมีเดียของร้านไหมคะ?",
+        ],
+      };
+
+      /* จับหมวดจากคีย์เวิร์ด (ยืดหยุ่น) */
+      function detectCategory(message) {
+        const msg = (message || "").toLowerCase().trim();
+        const kwActivity = [
+          "กิจกรรม",
+          "เพิ่มกิจกรรม",
+          "งาน",
+          "event",
+          "อีเวนท์",
+          "จัดงาน",
+          "เวิร์กช็อป",
+          "workshop",
+        ];
+        const kwPlace = [
+          "สถานที่",
+          "สถานที่ท่องเที่ยว",
+          "ท่องเที่ยว",
+          "เที่ยว",
+          "แหล่งท่องเที่ยว",
+          "แลนด์มาร์ก",
+          "place",
+          "แหล่งเที่ยว",
+          "tourist",
+        ];
+        const kwRestaurant = [
+          "ร้านอาหาร",
+          "ร้านกิน",
+          "กิน",
+          "ของกิน",
+          "อาหาร",
+          "คาเฟ่",
+          "ร้านกาแฟ",
+          "restaurant",
+          "เมนู",
+          "cafe",
+          "coffee",
+        ];
+        const kwHotel = [
+          "โรงแรม",
+          "ที่พัก",
+          "โฮสเทล",
+          "รีสอร์ท",
+          "เกสต์เฮ้าส์",
+          "hotel",
+          "hostel",
+          "จองที่พัก",
+          "ห้องพัก",
+          "resort",
+        ];
+        const kwShop = [
+          "ร้านค้า",
+          "ตลาด",
+          "ขายของ",
+          "ร้านขายผลไม้",
+          "แผงผลไม้",
+          "shop",
+          "market",
+          "store",
+          "ของฝาก",
+          "ของใช้",
+          "ค้าปลีก",
+          "ขายผลไม้",
+          "ซุปเปอร์",
+          "มินิมาร์ท",
+        ];
+        const hit = (arr) => arr.some((k) => msg.includes(k));
+        if (hit(kwActivity)) return "activity";
+        if (hit(kwPlace)) return "place";
+        if (hit(kwRestaurant)) return "restaurant";
+        if (hit(kwHotel)) return "hotel";
+        if (hit(kwShop)) return "shop";
+        return null;
+      }
+
+      function speakThai(text) {
+        const cleaned = text.replace(
+          /[\p{Emoji_Presentation}\p{Emoji}\u200d]+/gu,
+          ""
+        );
+        if ("speechSynthesis" in window) {
+          const u = new SpeechSynthesisUtterance(cleaned);
+          u.lang = "th-TH";
+          const v = speechSynthesis
+            .getVoices()
+            .filter((x) => x.lang.startsWith("th"));
+          if (v.length > 0) u.voice = v[0];
+          speechSynthesis.speak(u);
+        }
+      }
+
+      function addBubble(text, sender) {
+        const div = document.createElement("div");
+        div.className = "bubble " + sender;
+        div.textContent = text;
+        chatMessages.appendChild(div);
+        scrollChatToBottom();
+      }
+      function reply(text) {
+        addBubble(text, "ai");
+        speakThai(text);
+      }
+
+      function toggleChat() {
+        const visible = chatBox.style.display === "flex";
+        if (visible) {
+          minimizeChat();
+        } else {
+          showChat();
+          if (chatMessages.childElementCount === 0) {
+            const greeting = `สวัสดีค่ะชุมชน ${communityName} พลอยใสยินดีให้บริการค่ะ 🌸`;
+            reply(greeting);
+            setTimeout(() => {
+              reply(
+                "วันนี้อยากสร้างคอนเทนต์แบบไหนคะ (กิจกรรม, สถานที่ท่องเที่ยว, ร้านอาหาร, ร้านค้า, โรงแรม)?"
+              );
+            }, 1200);
+          }
+        }
+      }
+
+      function sendMsg(text) {
+        const message = text || userInput.value.trim();
+        if (!message) return;
+        addBubble(message, "user");
+        userInput.value = "";
+
+        if (editingIndex !== null) {
+          currentData[editingIndex] = message;
+          editingIndex = null;
+          showPreview();
           return;
         }
-        selectedType = detected;
-        step = 1; currentData = {}; askNext();
-      } else {
-        const questions = templates[selectedType];
-        currentData[step - 1] = message;
-        step++;
-        if (step <= questions.length) { askNext(); } else { showPreview(); step = 0; }
+
+        if (step === 0) {
+          const detected = detectCategory(message);
+          if (!detected) {
+            reply(
+              "กรุณาระบุประเภท: กิจกรรม / สถานที่ท่องเที่ยว / ร้านอาหาร / ร้านค้า / โรงแรม (เช่น 'เพิ่มกิจกรรม', 'ท่องเที่ยว', 'คาเฟ่', 'ตลาด', 'ที่พัก')"
+            );
+            return;
+          }
+          selectedType = detected;
+          step = 1;
+          currentData = {};
+          askNext();
+        } else {
+          const questions = templates[selectedType];
+          currentData[step - 1] = message;
+          step++;
+          if (step <= questions.length) {
+            askNext();
+          } else {
+            showPreview();
+            step = 0;
+          }
+        }
       }
-    }
 
-    function askNext(){ const q = templates[selectedType][step - 1]; reply(q); }
+      function askNext() {
+        const q = templates[selectedType][step - 1];
+        reply(q);
+      }
 
-    /* แผนการแสดงผล Audience + ปุ่มยืนยัน */
-    function renderAudienceSelector(){
-      const checkedTeen   = targetAudience === 'teen'   ? 'checked' : '';
-      const checkedWork   = targetAudience === 'work'   ? 'checked' : '';
-      const checkedSenior = targetAudience === 'senior' ? 'checked' : '';
+      /* แผนการแสดงผล Audience + ปุ่มยืนยัน */
+      function renderAudienceSelector() {
+        const checkedTeen = targetAudience === "teen" ? "checked" : "";
+        const checkedWork = targetAudience === "work" ? "checked" : "";
+        const checkedSenior = targetAudience === "senior" ? "checked" : "";
 
-      return `
+        return `
         <fieldset class="audience">
           <legend>🎯 เลือกกลุ่มเป้าหมาย</legend>
           <div class="opts">
@@ -469,203 +716,249 @@
           </div>
         </fieldset>
       `;
-    }
-
-    function showPreview(){
-      const labels = templates[selectedType];
-      let html = '<div class="activity-box">';
-      labels.forEach((label, i) => {
-        html += `<p><b>${label}</b> ${currentData[i] || ""} <button class="btn secondary" style="padding:4px 8px" onclick="editField(${i})">✏️</button></p>`;
-      });
-      html += renderAudienceSelector();
-      html += `<div class="row" style="margin-top:10px"><button class="btn" onclick="confirmActivity()">✅ ยืนยัน</button></div></div>`;
-      activityPreview.innerHTML = html;
-
-      // แจ้ง + ย่อแชททุกหน้าจอ
-      reply("นี่คือสรุปข้อมูลใหม่ของคุณค่ะ ตรวจสอบด้านซ้าย แล้วกดแก้ไขหรือยืนยันได้เลย");
-      setTimeout(minimizeChat, 400);
-    }
-
-    /* ฟัง change ของ radio audience (event delegation เพราะ element ถูก render แบบไดนามิก) */
-    document.addEventListener('change', (e) => {
-      const t = e.target;
-      if (t && t.name === 'audience') {
-        targetAudience = t.value; // 'teen' | 'work' | 'senior'
       }
-    });
 
-    function editField(index){
-      editingIndex = index;
-      const q = templates[selectedType][index];
-      showChat();
-      reply("ตกลงค่ะ เราจะแก้ไขข้อนี้ใหม่นะคะ");
-      setTimeout(() => { reply(q); scrollChatToBottom(); }, 300);
-    }
-
-    function confirmActivity(){
-      const labels = templates[selectedType];
-      let html = '<div class="activity-box">';
-      labels.forEach((label, i) => { html += `<p><b>${label}</b> ${currentData[i] || ""}</p>`; });
-      html += `<p><b>กลุ่มเป้าหมาย</b> ${targetAudience === 'teen' ? 'วัยรุ่น' : targetAudience === 'senior' ? 'ผู้สูงอายุ' : 'วัยทำงาน'}</p>`;
-      html += `<div class="row"><button class="btn" onclick="generateContent()">✨ สร้างโพสต์ด้วย AI</button></div></div>`;
-      const div = document.createElement("div");
-      div.className = "activity-box";
-      div.innerHTML = html;
-      activityList.prepend(div);
-      activityPreview.innerHTML = "";
-      reply("ข้อมูลถูกบันทึกเรียบร้อยแล้วค่ะ 🎉");
-
-      /* ---- Google Sheet: รอบที่ 1 (ตอนยืนยัน) ---- */
-      sendToSheet({
-        communityName,
-        type: selectedType,
-        answers: { ...currentData, _audience: targetAudience },
-        aiContent: ''
-      });
-    }
-
-    function audienceGuideline(){
-      if (targetAudience === 'teen') {
-        return "โทนวัยรุ่น สนุก กระชับ ใช้คำง่าย อาจมีอีโมจิเล็กน้อย ไม่ทางการ เน้นชวนเพื่อน ชวนแชร์";
-      }
-      if (targetAudience === 'senior') {
-        return "โทนสุภาพ อ่านง่าย ประโยคสั้น ชัดเจน หลีกเลี่ยงศัพท์สแลง เน้นรายละเอียดเวลา/สถานที่/การติดต่อ";
-      }
-      return "โทนทางการเล็กน้อย กระชับ เข้าใจง่าย เน้นประโยชน์ เวลาสถานที่ และสิ่งที่ต้องเตรียม";
-    }
-
-    async function generateContent(){
-      const labels = templates[selectedType];
-      let prompt = `ช่วยเขียนโพสต์แนะนำหมวด "${selectedType}" โดยใช้ข้อมูลต่อไปนี้:\n`;
-      labels.forEach((label, i) => prompt += `- ${label}: ${currentData[i] || "-"}\n`);
-      const audThai = targetAudience === 'teen' ? 'กลุ่มวัยรุ่น' : targetAudience === 'senior' ? 'กลุ่มผู้สูงอายุ' : 'กลุ่มวัยทำงาน';
-      prompt += `\nกลุ่มเป้าหมาย: ${audThai}\nโปรดปรับโทนภาษาให้เหมาะสมตามแนวทาง: ${audienceGuideline()}\n`;
-      prompt += `ฟอร์แมต: เขียนเป็นย่อหน้าอ่านง่าย 1-2 ย่อหน้า พร้อมคำชวนปฏิบัติท้ายโพสต์`;
-
-      reply("กำลังสร้างโพสต์จาก AI กรุณารอสักครู่...");
-      const backendUrl = getBackendUrl();
-      try{
-        const data = await fetchJSON(backendUrl, {
-          method:"POST",
-          headers:{ "Content-Type":"application/json" },
-          body: JSON.stringify({ prompt })
+      function showPreview() {
+        const labels = templates[selectedType];
+        let html = '<div class="activity-box">';
+        labels.forEach((label, i) => {
+          html += `<p><b>${label}</b> ${
+            currentData[i] || ""
+          } <button class="btn secondary" style="padding:4px 8px" onclick="editField(${i})">✏️</button></p>`;
         });
-        const content = data?.content;
-        if(content){
-          aiContentEl.textContent = content;
-          aiBox.style.display = "block";
-          reply("พลอยใสช่วยสร้างโพสต์ให้เรียบร้อยแล้วค่ะ ลองตรวจสอบดูนะคะ 😊");
-          setTimeout(minimizeChat, 200);
+        html += renderAudienceSelector();
+        html += `<div class="row" style="margin-top:10px"><button class="btn" onclick="confirmActivity()">✅ ยืนยัน</button></div></div>`;
+        activityPreview.innerHTML = html;
 
-          /* ---- Google Sheet: รอบที่ 2 (มีเนื้อหา AI) ---- */
-          sendToSheet({
-            communityName,
-            type: selectedType,
-            answers: { ...currentData, _audience: targetAudience },
-            aiContent: content
-          });
-        }else{
-          reply("ขออภัย ไม่สามารถสร้างโพสต์ได้ในขณะนี้");
+        // แจ้ง + ย่อแชททุกหน้าจอ
+        reply(
+          "นี่คือสรุปข้อมูลใหม่ของคุณค่ะ ตรวจสอบด้านซ้าย แล้วกดแก้ไขหรือยืนยันได้เลย"
+        );
+        setTimeout(minimizeChat, 400);
+      }
+
+      /* ฟัง change ของ radio audience (event delegation เพราะ element ถูก render แบบไดนามิก) */
+      document.addEventListener("change", (e) => {
+        const t = e.target;
+        if (t && t.name === "audience") {
+          targetAudience = t.value; // 'teen' | 'work' | 'senior'
         }
-      }catch(err){
-        console.error(err);
-        reply("เกิดข้อผิดพลาดในการเชื่อมต่อ AI ("+ err.message +")");
+      });
+
+      function editField(index) {
+        editingIndex = index;
+        const q = templates[selectedType][index];
+        showChat();
+        reply("ตกลงค่ะ เราจะแก้ไขข้อนี้ใหม่นะคะ");
+        setTimeout(() => {
+          reply(q);
+          scrollChatToBottom();
+        }, 300);
       }
-    }
 
-    /* ---------- ย่อโพสต์ให้สั้น กระชับ ---------- */
-    async function shortenContent(){
-      const current = aiContentEl.textContent.trim();
-      if (!current) {
-        alert("ยังไม่มีโพสต์ให้ย่อค่ะ ลองกดสร้างโพสต์ด้วย AI ก่อนนะคะ");
-        return;
-      }
-      const prevText = shortenBtn.textContent;
-      shortenBtn.disabled = true;
-      shortenBtn.textContent = "กำลังย่อ...";
-
-      reply("เดี๋ยวพลอยใสช่วยย่อให้กระชับนะคะ ✂️");
-
-      const backendUrl = getBackendUrl();
-      const shortenPrompt =
-        "ช่วยย่อข้อความภาษาไทยด้านล่างให้ 'สั้น กระชับ อ่านง่าย สไตล์วัยรุ่น/ทั่วไป' " +
-        "เน้นใจความสำคัญ, ตัดคำซ้ำซ้อน, ใช้ประโยคสั้น, ไม่เวิ่นเว้อ, " +
-        "เลี่ยงอีโมจิ/แฮชแท็กเยอะเกินไป (อนุญาตต้นประโยค 1 อีโมจิได้), " +
-        "ยาวประมาณ 120–280 อักขระ:\n\n" + current;
-
-      try{
-        const data = await fetchJSON(backendUrl, {
-          method:"POST",
-          headers:{ "Content-Type":"application/json" },
-          body: JSON.stringify({ prompt: shortenPrompt })
+      function confirmActivity() {
+        const labels = templates[selectedType];
+        let html = '<div class="activity-box">';
+        labels.forEach((label, i) => {
+          html += `<p><b>${label}</b> ${currentData[i] || ""}</p>`;
         });
-        const concise = data?.content?.trim();
-        if (!concise) throw new Error("ไม่มีเนื้อหาตอบกลับ");
+        html += `<p><b>กลุ่มเป้าหมาย</b> ${
+          targetAudience === "teen"
+            ? "วัยรุ่น"
+            : targetAudience === "senior"
+            ? "ผู้สูงอายุ"
+            : "วัยทำงาน"
+        }</p>`;
+        html += `<div class="row"><button class="btn" onclick="generateContent()">✨ สร้างโพสต์ด้วย AI</button></div></div>`;
+        const div = document.createElement("div");
+        div.className = "activity-box";
+        div.innerHTML = html;
+        activityList.prepend(div);
+        activityPreview.innerHTML = "";
+        reply("ข้อมูลถูกบันทึกเรียบร้อยแล้วค่ะ 🎉");
 
-        aiContentEl.textContent = concise;
-        reply("เรียบร้อยค่ะ — ปรับให้กระชับแล้ว ลองอ่านดูได้เลย 🤏");
-        setTimeout(minimizeChat, 200);
-
-        /* ---- Google Sheet: รอบที่ 3 (เวอร์ชันย่อ) ---- */
+        /* ---- Google Sheet: รอบที่ 1 (ตอนยืนยัน) ---- */
         sendToSheet({
           communityName,
           type: selectedType,
           answers: { ...currentData, _audience: targetAudience },
-          aiContent: concise
+          aiContent: "",
         });
-      }catch(err){
-        console.error(err);
-        reply("ขออภัย ย่อไม่สำเร็จตอนนี้ ("+ err.message +")");
-      }finally{
-        shortenBtn.disabled = false;
-        shortenBtn.textContent = prevText;
       }
-    }
 
-    function startVoice(){
-      if (!("webkitSpeechRecognition" in window)) { alert("เบราว์เซอร์นี้ไม่รองรับ Speech Recognition"); return; }
-      const recognition = new webkitSpeechRecognition();
-      recognition.lang = "th-TH"; recognition.interimResults = false; recognition.maxAlternatives = 1; recognition.start();
-      recognition.onresult = (e) => { const transcript = e.results[0][0].transcript; sendMsg(transcript); };
-      recognition.onerror = (e) => console.error("Voice error:", e.error);
-    }
-
-    userInput.addEventListener("keydown", function (event) {
-      if (event.key === "Enter") { event.preventDefault(); sendMsg(); }
-    });
-
-    function copyPostText(){
-      const content = aiContentEl.innerText;
-      navigator.clipboard.writeText(content)
-        .then(() => alert("📋 คัดลอกข้อความเรียบร้อยแล้ว กรุณานำไปวางในโพสต์ Facebook"))
-        .catch(() => alert("เกิดข้อผิดพลาดในการคัดลอก"));
-    }
-
-    function openFacebookPost(){
-      const content = aiContentEl.innerText;
-      const fbUrl = `https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(content)}`;
-      window.open(fbUrl, "_blank");
-    }
-    
-    /* เพิ่มฟังก์ชันใหม่ Quick Post */
-    async function generateQuickPost(){
-      const idea=document.getElementById("quickPostInput").value.trim();
-      if(!idea) return alert("กรอกข้อความก่อน");
-      document.getElementById("quickPostResult").textContent="⏳ กำลังสร้าง...";
-      const backendUrl=getBackendUrl();
-      const prompt="ช่วยเขียนโพสต์โปรโมทจากไอเดียนี้: "+idea;
-      try{
-        const data=await fetchJSON(backendUrl,{
-          method:"POST",headers:{"Content-Type":"application/json"},
-          body:JSON.stringify({prompt})
-        });
-        document.getElementById("quickPostResult").textContent=data.content;
-        document.getElementById("aiGeneratedContent").textContent=data.content;
-        document.getElementById("aiContentBox").style.display="block";
-      }catch(e){
-        document.getElementById("quickPostResult").textContent="❌ ไม่สำเร็จ";
+      function audienceGuideline() {
+        if (targetAudience === "teen") {
+          return "โทนวัยรุ่น สนุก กระชับ ใช้คำง่าย อาจมีอีโมจิเล็กน้อย ไม่ทางการ เน้นชวนเพื่อน ชวนแชร์";
+        }
+        if (targetAudience === "senior") {
+          return "โทนสุภาพ อ่านง่าย ประโยคสั้น ชัดเจน หลีกเลี่ยงศัพท์สแลง เน้นรายละเอียดเวลา/สถานที่/การติดต่อ";
+        }
+        return "โทนทางการเล็กน้อย กระชับ เข้าใจง่าย เน้นประโยชน์ เวลาสถานที่ และสิ่งที่ต้องเตรียม";
       }
-    }
-  </script>
-</body>
+
+      async function generateContent() {
+        const labels = templates[selectedType];
+        let prompt = `ช่วยเขียนโพสต์แนะนำหมวด "${selectedType}" โดยใช้ข้อมูลต่อไปนี้:\n`;
+        labels.forEach(
+          (label, i) => (prompt += `- ${label}: ${currentData[i] || "-"}\n`)
+        );
+        const audThai =
+          targetAudience === "teen"
+            ? "กลุ่มวัยรุ่น"
+            : targetAudience === "senior"
+            ? "กลุ่มผู้สูงอายุ"
+            : "กลุ่มวัยทำงาน";
+        prompt += `\nกลุ่มเป้าหมาย: ${audThai}\nโปรดปรับโทนภาษาให้เหมาะสมตามแนวทาง: ${audienceGuideline()}\n`;
+        prompt += `ฟอร์แมต: เขียนเป็นย่อหน้าอ่านง่าย 1-2 ย่อหน้า พร้อมคำชวนปฏิบัติท้ายโพสต์`;
+
+        reply("กำลังสร้างโพสต์จาก AI กรุณารอสักครู่...");
+        const backendUrl = getBackendUrl();
+        try {
+          const data = await fetchJSON(backendUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt }),
+          });
+          const content = data?.content;
+          if (content) {
+            aiContentEl.textContent = content;
+            aiBox.style.display = "block";
+            reply(
+              "พลอยใสช่วยสร้างโพสต์ให้เรียบร้อยแล้วค่ะ ลองตรวจสอบดูนะคะ 😊"
+            );
+            setTimeout(minimizeChat, 200);
+
+            /* ---- Google Sheet: รอบที่ 2 (มีเนื้อหา AI) ---- */
+            sendToSheet({
+              communityName,
+              type: selectedType,
+              answers: { ...currentData, _audience: targetAudience },
+              aiContent: content,
+            });
+          } else {
+            reply("ขออภัย ไม่สามารถสร้างโพสต์ได้ในขณะนี้");
+          }
+        } catch (err) {
+          console.error(err);
+          reply("เกิดข้อผิดพลาดในการเชื่อมต่อ AI (" + err.message + ")");
+        }
+      }
+
+      /* ---------- ย่อโพสต์ให้สั้น กระชับ ---------- */
+      async function shortenContent() {
+        const current = aiContentEl.textContent.trim();
+        if (!current) {
+          alert("ยังไม่มีโพสต์ให้ย่อค่ะ ลองกดสร้างโพสต์ด้วย AI ก่อนนะคะ");
+          return;
+        }
+        const prevText = shortenBtn.textContent;
+        shortenBtn.disabled = true;
+        shortenBtn.textContent = "กำลังย่อ...";
+
+        reply("เดี๋ยวพลอยใสช่วยย่อให้กระชับนะคะ ✂️");
+
+        const backendUrl = getBackendUrl();
+        const shortenPrompt =
+          "ช่วยย่อข้อความภาษาไทยด้านล่างให้ 'สั้น กระชับ อ่านง่าย สไตล์วัยรุ่น/ทั่วไป' " +
+          "เน้นใจความสำคัญ, ตัดคำซ้ำซ้อน, ใช้ประโยคสั้น, ไม่เวิ่นเว้อ, " +
+          "เลี่ยงอีโมจิ/แฮชแท็กเยอะเกินไป (อนุญาตต้นประโยค 1 อีโมจิได้), " +
+          "ยาวประมาณ 120–280 อักขระ:\n\n" +
+          current;
+
+        try {
+          const data = await fetchJSON(backendUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt: shortenPrompt }),
+          });
+          const concise = data?.content?.trim();
+          if (!concise) throw new Error("ไม่มีเนื้อหาตอบกลับ");
+
+          aiContentEl.textContent = concise;
+          reply("เรียบร้อยค่ะ — ปรับให้กระชับแล้ว ลองอ่านดูได้เลย 🤏");
+          setTimeout(minimizeChat, 200);
+
+          /* ---- Google Sheet: รอบที่ 3 (เวอร์ชันย่อ) ---- */
+          sendToSheet({
+            communityName,
+            type: selectedType,
+            answers: { ...currentData, _audience: targetAudience },
+            aiContent: concise,
+          });
+        } catch (err) {
+          console.error(err);
+          reply("ขออภัย ย่อไม่สำเร็จตอนนี้ (" + err.message + ")");
+        } finally {
+          shortenBtn.disabled = false;
+          shortenBtn.textContent = prevText;
+        }
+      }
+
+      function startVoice() {
+        if (!("webkitSpeechRecognition" in window)) {
+          alert("เบราว์เซอร์นี้ไม่รองรับ Speech Recognition");
+          return;
+        }
+        const recognition = new webkitSpeechRecognition();
+        recognition.lang = "th-TH";
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+        recognition.start();
+        recognition.onresult = (e) => {
+          const transcript = e.results[0][0].transcript;
+          sendMsg(transcript);
+        };
+        recognition.onerror = (e) => console.error("Voice error:", e.error);
+      }
+
+      userInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          sendMsg();
+        }
+      });
+
+      function copyPostText() {
+        const content = aiContentEl.innerText;
+        navigator.clipboard
+          .writeText(content)
+          .then(() =>
+            alert("📋 คัดลอกข้อความเรียบร้อยแล้ว กรุณานำไปวางในโพสต์ Facebook")
+          )
+          .catch(() => alert("เกิดข้อผิดพลาดในการคัดลอก"));
+      }
+
+      function openFacebookPost() {
+        const content = aiContentEl.innerText;
+        const fbUrl = `https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(
+          content
+        )}`;
+        window.open(fbUrl, "_blank");
+      }
+
+      /* เพิ่มฟังก์ชันใหม่ Quick Post */
+      async function generateQuickPost() {
+        const idea = document.getElementById("quickPostInput").value.trim();
+        if (!idea) return alert("กรอกข้อความก่อน");
+        document.getElementById("quickPostResult").textContent =
+          "⏳ กำลังสร้าง...";
+        const backendUrl = getBackendUrl();
+        const prompt = "ช่วยเขียนโพสต์โปรโมทจากไอเดียนี้: " + idea;
+        try {
+          const data = await fetchJSON(backendUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt }),
+          });
+          document.getElementById("quickPostResult").textContent = data.content;
+          document.getElementById("aiGeneratedContent").textContent =
+            data.content;
+          document.getElementById("aiContentBox").style.display = "block";
+        } catch (e) {
+          document.getElementById("quickPostResult").textContent =
+            "❌ ไม่สำเร็จ";
+        }
+      }
+    </script>
+  </body>
 </html>
